@@ -22,32 +22,11 @@
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
-    <!-- ======= Header ======= -->
-    <header id="header" class="fixed-top d-flex align-items-center">
-        <div class="container d-flex align-items-center">
-            <h1 class="logo me-auto"><a href="index.html">Lingyun Temple<span>.</span></a></h1>
-            <!-- Uncomment below if you prefer to use an image logo -->
-            {{-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt=""></a> --}}
-
-            <nav id="navbar" class="navbar order-last order-lg-0">
-                <ul>
-                    <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-                    <li><a class="nav-link scrollto" href="#about">About</a></li>
-                    <li><a class="nav-link scrollto" href="#services">Services</a></li>
-                    <li><a class="nav-link scrollto " href="#portfolio">Portfolio</a></li>
-                    <li><a class="nav-link scrollto " href="#testimonials">Testimonials</a></li>
-                    <li><a class="nav-link scrollto" href="#team">Team</a></li>
-                    <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-                </ul>
-                <i class="bi bi-list mobile-nav-toggle"></i>
-            </nav>
-
-            <a href="#about" class="get-started-btn scrollto">Donate</a>
-        </div>
-    </header>
+    @include('components/navbar')
 
 
 
@@ -58,8 +37,8 @@
                 <div class="col-xl-6">
                     <h1>Welcome to Lingyun Temple</h1>
                     <h2>A Sanctuary of Serenity and Spirituality Amidst the Yellow Mountains</h2>
-                    <a href="#about" class="btn-get-started scrollto">Discover More</a>
-                    <a href="#about" class="btn-get-started scrollto">Support Us</a>
+                    <a href="#tabs" class="btn-get-started scrollto">Discover More</a>
+                    <a href="#donation" class="btn-get-started scrollto">Support Us</a>
                 </div>
             </div>
         </div>
@@ -69,729 +48,375 @@
 
     <main id="main">
 
-        <!-- ======= Clients Section ======= -->
-        <section id="clients" class="clients pb-0">
-            <div class="container" data-aos="zoom-in">
-                <div class="clients-slider swiper">
-                    <div class="swiper-wrapper align-items-center">
-                    <div class="swiper-slide"><img src="assets/img/clients/client-1.png" class="img-fluid" alt=""></div>
-                    <div class="swiper-slide"><img src="assets/img/clients/client-2.png" class="img-fluid" alt=""></div>
-                    <div class="swiper-slide"><img src="assets/img/clients/client-3.png" class="img-fluid" alt=""></div>
-                    <div class="swiper-slide"><img src="assets/img/clients/client-4.png" class="img-fluid" alt=""></div>
-                    <div class="swiper-slide"><img src="assets/img/clients/client-5.png" class="img-fluid" alt=""></div>
-                    <div class="swiper-slide"><img src="assets/img/clients/client-6.png" class="img-fluid" alt=""></div>
-                    <div class="swiper-slide"><img src="assets/img/clients/client-7.png" class="img-fluid" alt=""></div>
-                    <div class="swiper-slide"><img src="assets/img/clients/client-8.png" class="img-fluid" alt=""></div>
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- ======= About Section ======= -->
-        <section id="about" class="about section-bg">
+        <!-- ======= Tabs Section ======= -->
+        <section id="tabs" class="tabs">
             <div class="container" data-aos="fade-up">
-                <div class="row no-gutters">
-                    <div class="content col-xl-7 d-flex align-items-stretch">
-                        <div class="content">
-                            <h3>About Lingyun Temple</h3>
-                            <img src="assets/img/aboutus.jpg" alt="">
-                        </div>
-                    </div>
-                    <div class="col-xl-5 d-flex align-items-stretch">
-                        <div class="icon-boxes d-flex flex-column justify-content-center">
+
+                <div class="section-title">
+                    <h2>About Lingyun Temple</h2>
+                </div>
+
+                <div class="row">
+                    <ul class="nav nav-tabs row d-flex">
+                        <li class="nav-item col-4">
+                            <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#tab-1">
+                            <i class="ri-book-2-line"></i>
+                            <h4 class="d-none d-lg-block">History</h4>
+                            </a>
+                        </li>
+                        <li class="nav-item col-4">
+                            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-2">
+                            <i class="ri-building-line"></i>
+                            <h4 class="d-none d-lg-block">Architecture</h4>
+                            </a>
+                        </li>
+                        <li class="nav-item col-4">
+                            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-3">
+                            <i class="ri-sun-line"></i>
+                            <h4 class="d-none d-lg-block">Cultural Significance</h4>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active show" id="tab-1">
                             <div class="row">
-                                <div class="col-12 icon-box" data-aos="fade-up" data-aos-delay="100">
-                                    <i class="bx bx-receipt"></i>
-                                    <h4>Introduction</h4>
-                                    <p>Welcome to Lingyun Temple, a serene sanctuary nestled in the heart of the majestic Yellow Mountains.
-                                        Established in the 5th century, Lingyun Temple has been a place of peace, meditation, and spiritual pursuit for centuries.</p>
+                                <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
+                                    <h3>The Ancient Chronicles of Lingyun Temple</h3>
+                                    <p class="fst-italic py-3">
+                                        Lingyun Temple's saga begins over a thousand years ago, rooted in the era of the Tang Dynasty, symbolizing a continuum of peace and spiritual refuge. Its foundation was laid by devout monks seeking solitude and enlightenment amidst the tranquil embrace of nature. Through centuries of upheaval, including wars and natural disasters, Lingyun Temple has stood resilient, its spires reaching towards the heavens, unshaken.
+                                    </p>
+                                    <ul>
+                                        <li><i class="ri-check-double-line"></i> A beacon for pilgrims, the temple has been a site of spiritual journeying, drawing seekers from far and wide.</li>
+                                        <li><i class="ri-check-double-line"></i> Survived through the Mongol invasions and stood firm during the turbulence of the Ming and Qing dynasties.</li>
+                                        <li><i class="ri-check-double-line"></i> Today, it stands not only as a monument to its founders' vision but as a living, breathing center for Buddhist learning and culture.</li>
+                                        <li><i class="ri-check-double-line"></i> The temple's resilience is a testament to its significance, enduring as a symbol of hope and renewal through the ages.</li>
+                                    </ul>
                                 </div>
-                                <div class="col-12 icon-box" data-aos="fade-up" data-aos-delay="200">
-                                    <i class="bx bx-cube-alt"></i>
-                                    <h4>Historical Background</h4>
-                                    <p>Founded by the eminent monk Daoxuan, Lingyun Temple has withstood the test of time, preserving the essence of Buddhist teachings and Chinese culture.
-                                        Its architecture, featuring intricate carvings and traditional pagodas, reflects the profound spiritual heritage of China.</p>
+                                <div class="col-lg-6 order-1 order-lg-2 text-center">
+                                    <img src="assets/img/tabs-1.jpg" alt="" class="img-fluid">
                                 </div>
-                                <div class="col-12 icon-box" data-aos="fade-up" data-aos-delay="300">
-                                    <i class="bx bx-images"></i>
-                                    <h4>Architectural Highlights</h4>
-                                    <p>The temple is renowned for its 'Dragon Gate' entrance, a masterpiece of ancient Chinese art,
-                                        and the 'Hall of a Thousand Buddhas,' housing an exquisite collection of Buddhist statues.</p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab-2">
+                            <div class="row">
+                                <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
+                                    <h3>Architectural Marvels of Lingyun Temple</h3>
+                                    <p class="fst-italic py-3">
+                                        Lingyun Temple's architectural grandeur is a harmonious blend of spiritual symbolism and natural beauty. Its structures, built according to ancient Feng Shui principles, are designed to be in perfect alignment with the cosmic and natural energies. The Main Hall, a masterpiece of wooden craftsmanship, features intricate carvings of mythical creatures believed to protect the temple from evil spirits.
+                                    </p>
+                                    <ul>
+                                        <li><i class="ri-check-double-line"></i> The temple grounds are a testament to classic Chinese landscape gardening, with each element meticulously placed to enhance spiritual and aesthetic appreciation.</li>
+                                        <li><i class="ri-check-double-line"></i> The use of natural materials in construction promotes a sense of unity with the surrounding landscape.</li>
+                                        <li><i class="ri-check-double-line"></i> Architectural features like the Dragon's Gate and the Phoenix Pavilion symbolize the pursuit of enlightenment and rebirth.</li>
+                                        <li><i class="ri-check-double-line"></i> The design principles of Lingyun Temple have influenced religious architecture across East Asia, embodying a legacy that transcends borders.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-6 order-1 order-lg-2 text-center">
+                                    <img src="assets/img/tabs-2.jpg" alt="" class="img-fluid">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab-3">
+                            <div class="row">
+                                <div class="col-lg-6 order-2 order-lg-1 mt-3 mr-3 mt-lg-0">
+                                    <h3>The Cultural Heartbeat of Lingyun Temple</h3>
+                                    <p class="fst-italic py-3">
+                                        Beyond its architectural splendor, Lingyun Temple serves as a vibrant cultural hub, preserving ancient traditions while fostering a community of mindfulness and compassion. It has been a cradle for Buddhist art, literature, and philosophy, hosting scholars and artists from across the continent. The temple's library, a repository of ancient manuscripts and texts, offers insights into the evolution of Buddhist thought and its intersection with local cultures.
+                                    </p>
+                                    <ul>
+                                        <li><i class="ri-check-double-line"></i> The annual Lotus Festival attracts thousands, symbolizing purity and enlightenment.</li>
+                                        <li><i class="ri-check-double-line"></i> Lingyun Temple's monks engage in community service, embodying the Buddhist principles of compassion and selflessness.</li>
+                                        <li><i class="ri-check-double-line"></i> Educational programs and meditation retreats offered at the temple provide a pathway for individuals seeking spiritual growth.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-6 order-1 order-lg-2 text-center">
+                                    <img src="assets/img/tabs-3.jpg" alt="" class="img-fluid">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
 
 
-        <!-- ======= Tabs Section ======= -->
-        <section id="tabs" class="tabs">
-        <div class="container" data-aos="fade-up">
+        <!-- ======= Gallery Section ======= -->
+        <section id="gallery" class="portfolio">
+            <div class="container" data-aos="fade-up">
 
-            <ul class="nav nav-tabs row d-flex">
-            <li class="nav-item col-3">
-                <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#tab-1">
-                <i class="ri-gps-line"></i>
-                <h4 class="d-none d-lg-block">Modi sit est dela pireda nest</h4>
-                </a>
-            </li>
-            <li class="nav-item col-3">
-                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-2">
-                <i class="ri-body-scan-line"></i>
-                <h4 class="d-none d-lg-block">Unde praesenti mara setra le</h4>
-                </a>
-            </li>
-            <li class="nav-item col-3">
-                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-3">
-                <i class="ri-sun-line"></i>
-                <h4 class="d-none d-lg-block">Pariatur explica nitro dela</h4>
-                </a>
-            </li>
-            <li class="nav-item col-3">
-                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-4">
-                <i class="ri-store-line"></i>
-                <h4 class="d-none d-lg-block">Nostrum qui dile node</h4>
-                </a>
-            </li>
-            </ul>
+                <div class="section-title">
+                <h2>Gallery</h2>
+                <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.</p>
+                </div>
 
-            <div class="tab-content">
-            <div class="tab-pane active show" id="tab-1">
-                <div class="row">
-                <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0" data-aos="fade-up" data-aos-delay="100">
-                    <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
-                    <p class="fst-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
-                    </p>
-                    <ul>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                    <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
-                    </ul>
-                    <p>
-                    Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum
-                    </p>
-                </div>
-                <div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="fade-up" data-aos-delay="200">
-                    <img src="assets/img/tabs-1.jpg" alt="" class="img-fluid">
-                </div>
-                </div>
-            </div>
-            <div class="tab-pane" id="tab-2">
-                <div class="row">
-                <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                    <h3>Neque exercitationem debitis soluta quos debitis quo mollitia officia est</h3>
-                    <p>
-                    Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum
-                    </p>
-                    <p class="fst-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
-                    </p>
-                    <ul>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                    <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                    <li><i class="ri-check-double-line"></i> Provident mollitia neque rerum asperiores dolores quos qui a. Ipsum neque dolor voluptate nisi sed.</li>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
+                <div class="row" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <ul id="portfolio-flters">
+                    <li data-filter="*" class="filter-active">All</li>
+                    <li data-filter=".filter-app">App</li>
+                    <li data-filter=".filter-card">Card</li>
+                    <li data-filter=".filter-web">Web</li>
                     </ul>
                 </div>
-                <div class="col-lg-6 order-1 order-lg-2 text-center">
-                    <img src="assets/img/tabs-2.jpg" alt="" class="img-fluid">
                 </div>
-                </div>
-            </div>
-            <div class="tab-pane" id="tab-3">
-                <div class="row">
-                <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                    <h3>Voluptatibus commodi ut accusamus ea repudiandae ut autem dolor ut assumenda</h3>
-                    <p>
-                    Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum
-                    </p>
-                    <ul>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                    <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                    <li><i class="ri-check-double-line"></i> Provident mollitia neque rerum asperiores dolores quos qui a. Ipsum neque dolor voluptate nisi sed.</li>
-                    </ul>
-                    <p class="fst-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
-                    </p>
-                </div>
-                <div class="col-lg-6 order-1 order-lg-2 text-center">
-                    <img src="assets/img/tabs-3.jpg" alt="" class="img-fluid">
-                </div>
-                </div>
-            </div>
-            <div class="tab-pane" id="tab-4">
-                <div class="row">
-                <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                    <h3>Omnis fugiat ea explicabo sunt dolorum asperiores sequi inventore rerum</h3>
-                    <p>
-                    Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum
-                    </p>
-                    <p class="fst-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
-                    </p>
-                    <ul>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                    <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
-                    </ul>
-                </div>
-                <div class="col-lg-6 order-1 order-lg-2 text-center">
-                    <img src="assets/img/tabs-4.jpg" alt="" class="img-fluid">
-                </div>
-                </div>
-            </div>
-            </div>
 
-        </div>
-        </section><!-- End Tabs Section -->
+                <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
 
-        <!-- ======= Services Section ======= -->
-        <section id="services" class="services section-bg ">
-        <div class="container" data-aos="fade-up">
-
-            <div class="section-title">
-            <h2>Services</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.</p>
-            </div>
-
-            <div class="row">
-            <div class="col-md-6">
-                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
-                <i class="bi bi-briefcase"></i>
-                <h4><a href="#">Lorem Ipsum</a></h4>
-                <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
-                </div>
-            </div>
-            <div class="col-md-6 mt-4 mt-md-0">
-                <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
-                <i class="bi bi-card-checklist"></i>
-                <h4><a href="#">Dolor Sitema</a></h4>
-                <p>Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
-                </div>
-            </div>
-            <div class="col-md-6 mt-4 mt-md-0">
-                <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
-                <i class="bi bi-bar-chart"></i>
-                <h4><a href="#">Sed ut perspiciatis</a></h4>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
-                </div>
-            </div>
-            <div class="col-md-6 mt-4 mt-md-0">
-                <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
-                <i class="bi bi-binoculars"></i>
-                <h4><a href="#">Nemo Enim</a></h4>
-                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                </div>
-            </div>
-            <div class="col-md-6 mt-4 mt-md-0">
-                <div class="icon-box" data-aos="fade-up" data-aos-delay="500">
-                <i class="bi bi-brightness-high"></i>
-                <h4><a href="#">Magni Dolore</a></h4>
-                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque</p>
-                </div>
-            </div>
-            <div class="col-md-6 mt-4 mt-md-0">
-                <div class="icon-box" data-aos="fade-up" data-aos-delay="600">
-                <i class="bi bi-calendar4-week"></i>
-                <h4><a href="#">Eiusmod Tempor</a></h4>
-                <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-                </div>
-            </div>
-            </div>
-
-        </div>
-        </section><!-- End Services Section -->
-
-        <!-- ======= Portfolio Section ======= -->
-        <section id="portfolio" class="portfolio">
-        <div class="container" data-aos="fade-up">
-
-            <div class="section-title">
-            <h2>Portfolio</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.</p>
-            </div>
-
-            <div class="row" data-aos="fade-up" data-aos-delay="100">
-            <div class="col-lg-12 d-flex justify-content-center">
-                <ul id="portfolio-flters">
-                <li data-filter="*" class="filter-active">All</li>
-                <li data-filter=".filter-app">App</li>
-                <li data-filter=".filter-card">Card</li>
-                <li data-filter=".filter-web">Web</li>
-                </ul>
-            </div>
-            </div>
-
-            <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>App 1</h4>
-                    <p>App</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>App 1</h4>
+                        <p>App</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Web 3</h4>
-                    <p>Web</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>Web 3</h4>
+                        <p>Web</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>App 2</h4>
-                    <p>App</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>App 2</h4>
+                        <p>App</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Card 2</h4>
-                    <p>Card</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 2"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>Card 2</h4>
+                        <p>Card</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 2"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Web 2</h4>
-                    <p>Web</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 2"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>Web 2</h4>
+                        <p>Web</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 2"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>App 3</h4>
-                    <p>App</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 3"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>App 3</h4>
+                        <p>App</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 3"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Card 1</h4>
-                    <p>Card</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>Card 1</h4>
+                        <p>Card</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Card 3</h4>
-                    <p>Card</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>Card 3</h4>
+                        <p>Card</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                <div class="portfolio-wrap">
-                <img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Web 3</h4>
-                    <p>Web</p>
-                    <div class="portfolio-links">
-                    <a href="assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+                    <div class="portfolio-wrap">
+                    <img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                        <h4>Web 3</h4>
+                        <p>Web</p>
+                        <div class="portfolio-links">
+                        <a href="assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
+                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                        </div>
+                    </div>
                     </div>
                 </div>
+
                 </div>
-            </div>
 
             </div>
-
-        </div>
-        </section><!-- End Portfolio Section -->
+        </section>
 
 
 
 
         <!-- ======= Testimonials Section ======= -->
-        <section id="testimonials" class="testimonials">
+        <section id="testimonials" class="blog">
         <div class="container" data-aos="fade-up">
             <div class="section-title">
-            <h2>Testimonials</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.</p>
+                <h2>Events and Programs</h2>
+                <p>Explore the rich tapestry of cultural and spiritual events at Lingyun Temple. From traditional festivals to meditation retreats, each program is designed to enhance understanding, promote peace, and foster community engagement.</p>
             </div>
 
             <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
-            <div class="swiper-wrapper">
+                <div class="swiper-wrapper">
 
-                <div class="swiper-slide">
-                <div class="testimonial-wrap">
-                    <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-                    <h3>Saul Goodman</h3>
-                    <h4>Ceo &amp; Founder</h4>
-                    <p>
-                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
+                    <!-- Event 1 -->
+                    <div class="swiper-slide entries">
+                        <article class="entry">
+                            <div class="entry-img">
+                                <img src="assets/img/home-temple.jpg" alt="Image" class="img-fluid">
+                            </div>
+                            <h2 class="entry-title">
+                            <a href="event-details.html">Spring Meditation Retreat</a>
+                            </h2>
+                            <div class="entry-content">
+                                <p>
+                                    Refresh your mind with our Spring Meditation Retreat. Experience guided sessions focused on mindfulness and inner peace amidst the blossoming gardens.
+                                </p>
+                            </div>
+                        </article>
                     </div>
-                </div>
-                </div><!-- End testimonial item -->
 
-                <div class="swiper-slide">
-                <div class="testimonial-wrap">
-                    <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-                    <h3>Sara Wilsson</h3>
-                    <h4>Designer</h4>
-                    <p>
-                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
-                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
+                    <!-- Event 2 -->
+                    <div class="swiper-slide entries">
+                        <article class="entry">
+                            <div class="entry-img">
+                                <img src="assets/img/home-temple.jpg" alt="Image" class="img-fluid">
+                            </div>
+                            <h2 class="entry-title">
+                            <a href="event-details.html">Cultural Exchange Meet</a>
+                            </h2>
+                            <div class="entry-content">
+                                <p>
+                                    Discover the rich tapestry of our heritage at the Cultural Exchange Meet, featuring traditional arts, crafts, and performances by local artisans.
+                                </p>
+                            </div>
+                        </article>
                     </div>
-                </div>
-                </div><!-- End testimonial item -->
 
-                <div class="swiper-slide">
-                <div class="testimonial-wrap">
-                    <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-                    <h3>Jena Karlis</h3>
-                    <h4>Store Owner</h4>
-                    <p>
-                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
-                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
+                    <!-- Event 3 -->
+                    <div class="swiper-slide entries">
+                        <article class="entry">
+                            <div class="entry-img">
+                                <img src="assets/img/home-temple.jpg" alt="Image" class="img-fluid">
+                            </div>
+                            <h2 class="entry-title">
+                            <a href="event-details.html">Summer Festival</a>
+                            </h2>
+                            <div class="entry-content">
+                                <p>
+                                    Celebrate the summer solstice with us at the Summer Festival, a day of joyous festivities, music, and communal feasting under the sun.
+                                </p>
+                            </div>
+                        </article>
                     </div>
-                </div>
-                </div><!-- End testimonial item -->
 
-                <div class="swiper-slide">
-                <div class="testimonial-wrap">
-                    <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-                    <h3>Matt Brandon</h3>
-                    <h4>Freelancer</h4>
-                    <p>
-                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
-                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
-                    </div>
                 </div>
-                </div><!-- End testimonial item -->
 
-                <div class="swiper-slide">
-                <div class="testimonial-wrap">
-                    <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
-                    <h3>John Larson</h3>
-                    <h4>Entrepreneur</h4>
-                    <p>
-                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat esse veniam culpa fore nisi cillum quid.
-                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
-                    </div>
-                </div>
-                </div><!-- End testimonial item -->
-
-            </div>
-            <div class="swiper-pagination"></div>
+                <div class="swiper-pagination"></div>
             </div>
 
         </div>
         </section><!-- End Testimonials Section -->
 
-        <!-- ======= Pricing Section ======= -->
-        <section id="pricing" class="pricing section-bg">
-        <div class="container" data-aos="fade-up">
 
-            <div class="section-title">
-            <h2>Pricing</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.</p>
-            </div>
 
-            <div class="row">
+        <!-- ======= Donation Section ======= -->
+        <section id="donation" class="about section-bg">
+            <div class="container" data-aos="fade-up">
 
-            <div class="col-lg-4 col-md-6">
-                <div class="box" data-aos="fade-up" data-aos-delay="100">
-                <h3>Free</h3>
-                <h4><sup>$</sup>0<span> / month</span></h4>
-                <ul>
-                    <li>Aida dere</li>
-                    <li>Nec feugiat nisl</li>
-                    <li>Nulla at volutpat dola</li>
-                    <li class="na">Pharetra massa</li>
-                    <li class="na">Massa ultricies mi</li>
-                </ul>
-                <div class="btn-wrap">
-                    <a href="#" class="btn-buy">Buy Now</a>
+            <div class="row no-gutters">
+                <div class="content col-xl-5 d-flex align-items-stretch">
+                <div class="content">
+                    <h3>Your Generosity Fuels Our Mission</h3>
+                    <p>
+                    Your donations are instrumental in sustaining the cultural and spiritual heritage of Lingyun Temple. Each contribution aids in maintaining the temple grounds, supporting our monks, and funding our educational and community outreach programs.
+                    </p>
+                    <a href="#about" class="btn-get-started scrollto">Make a Donation</a>
                 </div>
                 </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
-                <div class="box featured" data-aos="fade-up" data-aos-delay="200">
-                <h3>Business</h3>
-                <h4><sup>$</sup>19<span> / month</span></h4>
-                <ul>
-                    <li>Aida dere</li>
-                    <li>Nec feugiat nisl</li>
-                    <li>Nulla at volutpat dola</li>
-                    <li>Pharetra massa</li>
-                    <li class="na">Massa ultricies mi</li>
-                </ul>
-                <div class="btn-wrap">
-                    <a href="#" class="btn-buy">Buy Now</a>
-                </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
-                <div class="box" data-aos="fade-up" data-aos-delay="300">
-                <h3>Developer</h3>
-                <h4><sup>$</sup>29<span> / month</span></h4>
-                <ul>
-                    <li>Aida dere</li>
-                    <li>Nec feugiat nisl</li>
-                    <li>Nulla at volutpat dola</li>
-                    <li>Pharetra massa</li>
-                    <li>Massa ultricies mi</li>
-                </ul>
-                <div class="btn-wrap">
-                    <a href="#" class="btn-buy">Buy Now</a>
-                </div>
-                </div>
-            </div>
-
-            </div>
-
-        </div>
-        </section><!-- End Pricing Section -->
-
-        <!-- ======= Frequently Asked Questions Section ======= -->
-        <section id="faq" class="faq">
-        <div class="container" data-aos="fade-up">
-
-            <div class="section-title">
-            <h2>Frequently Asked Questions</h2>
-            </div>
-
-            <ul class="faq-list accordion" data-aos="fade-up">
-
-            <li>
-                <a data-bs-toggle="collapse" class="collapsed" data-bs-target="#faq1">Non consectetur a erat nam at lectus urna duis? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-x icon-close"></i></a>
-                <div id="faq1" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                    Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
-                </p>
-                </div>
-            </li>
-
-            <li>
-                <a data-bs-toggle="collapse" data-bs-target="#faq2" class="collapsed">Feugiat scelerisque varius morbi enim nunc faucibus a pellentesque? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-x icon-close"></i></a>
-                <div id="faq2" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                    Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                </p>
-                </div>
-            </li>
-
-            <li>
-                <a data-bs-toggle="collapse" data-bs-target="#faq3" class="collapsed">Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-x icon-close"></i></a>
-                <div id="faq3" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                    Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
-                </p>
-                </div>
-            </li>
-
-            <li>
-                <a data-bs-toggle="collapse" data-bs-target="#faq4" class="collapsed">Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-x icon-close"></i></a>
-                <div id="faq4" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                    Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                </p>
-                </div>
-            </li>
-
-            <li>
-                <a data-bs-toggle="collapse" data-bs-target="#faq5" class="collapsed">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-x icon-close"></i></a>
-                <div id="faq5" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                    Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in
-                </p>
-                </div>
-            </li>
-
-            <li>
-                <a data-bs-toggle="collapse" data-bs-target="#faq6" class="collapsed">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-x icon-close"></i></a>
-                <div id="faq6" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                    Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus. Nibh tellus molestie nunc non blandit massa enim nec.
-                </p>
-                </div>
-            </li>
-
-            </ul>
-
-        </div>
-        </section><!-- End Frequently Asked Questions Section -->
-
-        <!-- ======= Team Section ======= -->
-        <section id="team" class="team section-bg">
-        <div class="container" data-aos="fade-up">
-
-            <div class="section-title">
-            <h2>Team</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.</p>
-            </div>
-
-            <div class="row">
-
-            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                <div class="member" data-aos="fade-up" data-aos-delay="100">
-                <div class="member-img">
-                    <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                    <div class="social">
-                    <a href=""><i class="bi bi-twitter"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
+                <div class="col-xl-7 d-flex align-items-stretch">
+                <div class="icon-boxes d-flex flex-column justify-content-center">
+                    <div class="row">
+                    <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
+                        <i class="bx bx-building-house"></i>
+                        <h4>Preserve the Sanctuary</h4>
+                        <p>Maintain and restore the temple's ancient architecture, ensuring it remains a beacon of peace for future generations.</p>
                     </div>
-                </div>
-                <div class="member-info">
-                    <h4>Walter White</h4>
-                    <span>Chief Executive Officer</span>
-                </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                <div class="member" data-aos="fade-up" data-aos-delay="200">
-                <div class="member-img">
-                    <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                    <div class="social">
-                    <a href=""><i class="bi bi-twitter"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
+                    <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
+                        <i class="bx bx-book-open"></i>
+                        <h4>Support Education</h4>
+                        <p>Contribute to the temple's educational programs, spreading wisdom and nurturing the minds of those seeking knowledge.</p>
                     </div>
-                </div>
-                <div class="member-info">
-                    <h4>Sarah Jhonson</h4>
-                    <span>Product Manager</span>
-                </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                <div class="member" data-aos="fade-up" data-aos-delay="300">
-                <div class="member-img">
-                    <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                    <div class="social">
-                    <a href=""><i class="bi bi-twitter"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
+                    <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
+                        <i class="bx bx-heart"></i>
+                        <h4>Community Care</h4>
+                        <p>Help us provide care and support to the community, embodying the compassionate spirit of Buddhism.</p>
                     </div>
-                </div>
-                <div class="member-info">
-                    <h4>William Anderson</h4>
-                    <span>CTO</span>
-                </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                <div class="member" data-aos="fade-up" data-aos-delay="400">
-                <div class="member-img">
-                    <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
-                    <div class="social">
-                    <a href=""><i class="bi bi-twitter"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
+                    <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
+                        <i class="bx bx-world"></i>
+                        <h4>Spread Harmony</h4>
+                        <p>Your gifts enable us to host cultural exchanges and events that foster harmony and understanding globally.</p>
                     </div>
-                </div>
-                <div class="member-info">
-                    <h4>Amanda Jepson</h4>
-                    <span>Accountant</span>
-                </div>
+                    </div>
+                </div><!-- End .content-->
                 </div>
             </div>
 
             </div>
+        </section><!-- End Donation Section -->
 
-        </div>
-        </section><!-- End Team Section -->
+
 
         <!-- ======= Contact Section ======= -->
         <section id="contact" class="contact">
@@ -864,95 +489,412 @@
 
     </main><!-- End #main -->
 
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
 
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
 
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>Presento<span>.</span></h3>
-            <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              United States <br><br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
-            </p>
-          </div>
+                <div class="col-lg-3 col-md-6 footer-contact">
+                    <h3>Presento<span>.</span></h3>
+                    <p>
+                    A108 Adam Street <br>
+                    New York, NY 535022<br>
+                    United States <br><br>
+                    <strong>Phone:</strong> +1 5589 55488 55<br>
+                    <strong>Email:</strong> info@example.com<br>
+                    </p>
+                </div>
 
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-            </ul>
-          </div>
+                <div class="col-lg-2 col-md-6 footer-links">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+                    </ul>
+                </div>
 
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-            </ul>
-          </div>
+                <div class="col-lg-3 col-md-6 footer-links">
+                    <h4>Our Services</h4>
+                    <ul>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
+                    </ul>
+                </div>
 
-          <div class="col-lg-4 col-md-6 footer-newsletter">
-            <h4>Join Our Newsletter</h4>
-            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
-            <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Subscribe">
-            </form>
-          </div>
+                <div class="col-lg-4 col-md-6 footer-newsletter">
+                    <h4>Join Our Newsletter</h4>
+                    <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+                    <form action="" method="post">
+                        <input type="email" name="email"><input type="submit" value="Subscribe">
+                    </form>
+                </div>
 
+                </div>
+            </div>
         </div>
-      </div>
+
+        <div class="container d-md-flex py-4">
+
+        <div class="me-md-auto text-center text-md-start">
+            <div class="copyright">
+            &copy; Copyright <strong><span>Presento</span></strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+        </div>
+        <div class="social-links text-center text-md-end pt-3 pt-md-0">
+            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+            <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+            <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        </div>
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+
+
+    <!-- Authentication Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Login / Register</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tab navs -->
+                    <ul class="nav nav-tabs mb-3" id="authTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Login</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">Register</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="authTabContent">
+                        <!-- Login Form -->
+                        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                            <form method="POST" id="loginForm">
+                                @csrf
+                                <div class="mb-3">
+                                    <div id="loginAlert" class="alert alert-danger d-none" role="alert">
+                                        This is a danger alert—check it out!
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="emailLogin" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="emailLogin" name="email" required autofocus>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="passwordLogin" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="passwordLogin" name="password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <p>Don't have an account? <a href="#" id="registerLink" style="color:grey">Register here</a></p>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </form>
+                        </div>
+
+                        <!-- Registration Form -->
+                        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                            <form method="POST" id="registrationForm">
+                                @csrf
+                                <div class="form-group mb-3">
+                                    <label for="surNameRegister">{{ __('Surname') }}</label>
+                                    <input type="text" class="form-control" id="surNameRegister" name="surname" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="givenNameRegister">{{ __('Given Name') }}</label>
+                                    <input type="text" class="form-control" id="givenNameRegister" name="givenName" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="emailRegister">{{ __('Email') }}</label>
+                                    <input type="email" class="form-control" id="emailRegister" name="email" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="addresssRegister">{{ __('Address') }}</label>
+                                    <input type="text" class="form-control" id="addresssRegister" name="address" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="contactRegister">{{ __('Contact Number') }}</label>
+                                    <input type="tel" class="form-control" id="contactRegister" name="contact" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="icRegister">{{ __('IC Number (Optional)') }}</label>
+                                    <input type="text" class="form-control" id="icRegister" name="ic">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="passwordRegister">{{ __('Password') }}</label>
+                                    <input type="password" class="form-control" id="passwordRegister" name="password" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="passwordConfirmationRegister">{{ __('Confirm Password') }}</label>
+                                    <input type="password" class="form-control" id="passwordConfirmationRegister" name="password_confirmation" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">{{ __('Register') }}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="container d-md-flex py-4">
 
-      <div class="me-md-auto text-center text-md-start">
-        <div class="copyright">
-          &copy; Copyright <strong><span>Presento</span></strong>. All Rights Reserved
+
+
+
+    {{-- <!-- Registration and Donation Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Donate to Lingyun Temple</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs" id="donationTab" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" id="donation-details-tab" data-bs-toggle="tab" data-bs-target="#donation-details" type="button" role="tab" aria-controls="donation-detailss" aria-selected="false">Donation Details</button>
+                        </li>
+                    </ul>
+
+                    <form id="combinedDonationForm" method="POST">
+                        <!-- Tab Content -->
+                        <div class="tab-content" id="donationTabsContent">
+
+                            <!-- Donation Details Tab Pane -->
+                            <div class="tab-pane fade show active" id="donation-details" role="tabpanel" aria-labelledby="donation-details-tab">
+                                <!-- Donation Form -->
+                                @csrf
+
+                                <!-- Donation Amount -->
+                                <div class="mb-3">
+                                    <label for="donationAmount" class="form-label">Donation Amount</label>
+                                    <input type="number" class="form-control" id="donationAmount" name="amount" required>
+                                </div>
+
+                                <!-- Blessing Types Table -->
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Blessing Type</th>
+                                            <th scope="col">Answer 1</th>
+                                            <th scope="col">Answer 2</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($blessingTypes as $type)
+                                            <tr>
+                                                <th scope="row">{{ $type->id }}</th>
+                                                <td>{{ $type->title }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="answers[{{ $type->id }}][answer1]">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="answers[{{ $type->id }}][answer2]">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+                                <button type="submit" class="btn btn-primary">Donate</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="credits">
-          <!-- All the links in the footer should remain intact. -->
-          <!-- You can delete the links only if you purchased the pro version. -->
-          <!-- Licensing information: https://bootstrapmade.com/license/ -->
-          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/presento-bootstrap-corporate-template/ -->
-          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
-      </div>
-      <div class="social-links text-center text-md-end pt-3 pt-md-0">
-        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-      </div>
-    </div>
-  </footer><!-- End Footer -->
+    </div> --}}
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
+
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById('registerLink').addEventListener('click', function(e) {
+                e.preventDefault();
+
+                var registerTab = new bootstrap.Tab(document.getElementById('register-tab'));
+                var authModal = bootstrap.Modal.getInstance(document.getElementById('authModal'));
+                authModal.hide();
+
+                authModal._element.addEventListener('hidden.bs.modal', function onModalHidden() {
+                    authModal.show();
+                    registerTab.show();
+                    authModal._element.removeEventListener('hidden.bs.modal', onModalHidden);
+                });
+            });
+        });
+
+
+        function displayErrors(form, errors) {
+            console.log(errors);
+            // Clear previous errors
+            form.querySelectorAll('.is-invalid').forEach(el => {
+                el.classList.remove('is-invalid');
+                el.nextElementSibling?.remove();
+            });
+
+            // Display new errors
+            for (const [field, messages] of Object.entries(errors)) {
+                const input = form.querySelector(`[name="${field}"]`);
+                input.classList.add('is-invalid');
+                const errorText = document.createElement('div');
+                errorText.className = 'invalid-feedback';
+                errorText.innerText = messages.join(' ');
+                input.parentNode.insertBefore(errorText, input.nextSibling);
+            }
+        }
+
+
+
+        function switchToDonationDetails() {
+            var myTab = new bootstrap.Tab(document.getElementById('donation-details-tab'));
+            myTab.show(); // Select tab by name
+        }
+
+
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+            const form = this;
+            const formData = new FormData(form);
+
+            fetch('/login', { // Adjust this URL to your login route
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // Handle unauthorized access
+                        response.json().then(data => {
+                            const message = data.message || 'Invalid credentials, please try again.';
+                            // Use the Bootstrap alert div to display this message
+                            const loginAlert = document.getElementById('loginAlert');
+                            loginAlert.textContent = message;
+                            loginAlert.classList.remove('d-none'); // Show the alert div
+                        });
+                    } else {
+                        throw response;
+                    }
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                if (data && data.success) {
+                    // Login was successful
+                    alert('Login successful');
+                    location.reload(); // or redirect to the dashboard or intended page
+                }
+            })
+            .catch(errorResponse => {
+                console.error('Fetch error:', errorResponse);
+            });
+        });
+
+
+
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+
+            fetch('/register', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('User has been registered');
+                    window.location.href = '/';
+                } else {
+                    // Handle errors
+                    displayErrors(form, data.errors);
+                }
+            })
+            .catch(errorResponse => {
+                errorResponse.json().then(errorData => {
+                    // Display error messages
+                    displayErrors(form, errorData.errors);
+                });
+            });
+        });
+
+
+
+        document.getElementById('combinedDonationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Collect all form data
+            var formData = new FormData(this);
+            // Perform the AJAX request
+            fetch('/submit-donation', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Donation submitted successfully!');
+                    $('#registerModal').modal('hide');
+                } else {
+                    alert('There was a problem submitting your donation.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 
 </body>
 

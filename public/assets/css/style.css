@@ -124,6 +124,7 @@ h6 {
   font-size: 14px;
   font-weight: 600;
   display: inline-block;
+  cursor: pointer;
 }
 
 .get-started-btn:hover {
@@ -758,6 +759,10 @@ section {
   margin-bottom: 0;
 }
 
+.tabs .order-2 {
+    padding-right: 50px;
+}
+
 /*--------------------------------------------------------------
 # Services
 --------------------------------------------------------------*/
@@ -998,83 +1003,105 @@ section {
 /*--------------------------------------------------------------
 # Testimonials
 --------------------------------------------------------------*/
-.testimonials .testimonials-carousel,
-.testimonials .testimonials-slider {
-  overflow: hidden;
+.testimonials .swiper-wrapper {
+    width: fit-content;
 }
 
-.testimonials .testimonial-item {
-  box-sizing: content-box;
-  padding: 30px;
-  margin: 30px 15px;
-  min-height: 200px;
-  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.08);
-  position: relative;
-  background: #fff;
-  border-radius: 15px;
+.testimonials .swiper-slide {
+    width: 100%;
 }
 
-.testimonials .testimonial-item .testimonial-img {
-  width: 90px;
-  border-radius: 10px;
-  border: 6px solid #fff;
-  float: left;
-  margin: 0 10px 0 0;
+.testimonials .card {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.testimonials .testimonial-item h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 25px 0 5px 0;
-  color: #111;
+.testimonials .card-content {
+    display: flex;
 }
 
-.testimonials .testimonial-item h4 {
-  font-size: 14px;
-  color: #999;
-  margin: 0;
+.testimonials .card-image {
+    position: relative;
+    width: 50%; /* Adjust as necessary */
 }
 
-.testimonials .testimonial-item .quote-icon-left,
-.testimonials .testimonial-item .quote-icon-right {
-  color: #fceaea;
-  font-size: 26px;
+.testimonials .card-image img {
+    width: 100%;
+    display: block;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 
-.testimonials .testimonial-item .quote-icon-left {
-  display: inline-block;
-  left: -5px;
-  position: relative;
+.testimonials .card-title {
+    position: absolute;
+    bottom: 10px; /* Adjust as necessary */
+    left: 0;
+    width: 100%;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    text-align: center;
 }
 
-.testimonials .testimonial-item .quote-icon-right {
-  display: inline-block;
-  right: -5px;
-  position: relative;
-  top: 10px;
+.testimonials .card-description {
+    padding: 20px;
+    flex: 1;
 }
 
-.testimonials .testimonial-item p {
-  font-style: italic;
-  margin: 30px auto 15px auto;
+.testimonials .card-description p {
+    margin: 0;
+    line-height: 1.5;
+    color: #333;
 }
 
-.testimonials .swiper-pagination {
-  margin-top: 20px;
-  position: relative;
+/*--------------------------------------------------------------
+# Donation
+--------------------------------------------------------------*/
+
+.donation .card {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
 }
 
-.testimonials .swiper-pagination .swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
-  background-color: #fff;
-  opacity: 1;
-  border: 1px solid #e03a3c;
+.donation .btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
 }
 
-.testimonials .swiper-pagination .swiper-pagination-bullet-active {
-  background-color: #e03a3c;
+.donation .btn-primary:hover {
+    color: #fff;
+    background-color: #0056b3;
+    border-color: #0056b3;
 }
+
+.donation hr.my-4 {
+    border-top: 3px solid #bbb;
+    width: 80%;
+}
+
+#donation .btn-get-started {
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 10px 30px;
+    border-radius: 4px;
+    transition: 0.5s;
+    margin-top: 30px;
+    color: #fff;
+    background: #e03a3c;
+    border: 2px solid #e03a3c;
+}
+
+#donation .btn-get-started:hover {
+    background: transparent;
+    border-color: #fff;
+}
+
 
 /*--------------------------------------------------------------
 # Pricing
