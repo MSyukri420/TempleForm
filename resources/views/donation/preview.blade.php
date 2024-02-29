@@ -23,17 +23,43 @@
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+
+    <style>
+        @font-face {
+            font-family: chinese;
+            src: url(wt064.ttf);
+        }
+
+        /* Add your custom styles here */
+        .form-display-table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .form-display-table th, .form-display-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        .form-display-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container my-5">
-        <h2 class="mb-4">Preview Your Donation</h2>
+        @auth
+            <h2 class="mb-4">Preview under {{ auth()->user()->surname }}</h2>
+        @else
+            <h2 class="mb-4">Preview as Guest</h2>
+        @endauth
 
         <!-- Donation Amount -->
         <div class="card mb-3">
-            <div class="card-header">Donation Amount</div>
+            <div class="card-header">Amount</div>
             <div class="card-body">
-                <h5 class="card-title">{{ $data['amount'] }}</h5>
+                <h5 class="card-title">RM {{ $data['amount'] }}</h5>
             </div>
         </div>
 
@@ -49,27 +75,90 @@
             </div>
         </div>
 
-        <!-- Answers Table -->
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Blessing Type</th>
-                    <th scope="col">Answer</th>
-                    <th scope="col">Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($data['answers'] as $blessingTypeId => $answerData)
+        <div>
+            <div style="display:flex;width:80%;align-items:center;justify-content:center;margin:auto;padding:30px 0;">
+                <img src="assets/img/form_logo.png" style="width:15%"/>
+                <div style="display:flex;flex-direction:column;gap:0;align-items:center;width:75%">
+                    <div style="font-size:2.5vw;font-weight:600;text-align:center;letter-spacing:1.5px;font-family:chinese;">佛教金剛乘精舍<span style="font-size:12px">(釋迦中心)</span></div>
+                    <div style="font-size:1.39vw;font-family:Roboto;font-weight:900;letter-spacing:0.5px;text-align:center;">PUSAT BUDDHA VAJRAYANA KUCHING <br> VAJRAYANA BUDDHIST CENTRE KUCHING</div>
+                    <div style="font-size:1.25vw;font-family:Roboto;font-weight:900;text-align:center;">(Sakya Chosphel Ling)</div>
+                    <div style="font-size:1.32vw;font-family:Roboto;font-weight:900;text-align:center;">28, PEACE ROAD, 93450 KUCHING. TEL/FAX:6082-337512</div>
+                    <div style="font-size:1.11vw;font-family:Roboto;font-weight:900;text-align:center;">website: www.sakyachosphelling.com &nbsp; email: sakya_chosphel@yahoo.com </div>
+                </div>
+            </div>
+
+            <!-- Answers Table -->
+            <table class="form-display-table">
+                <tbody>
                     <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
-                        <td>{{ $blessingTypes[$blessingTypeId] }}</td>
-                        <td>{{ $answerData['answer'] }}</td>
-                        <td>{{ $data['surname'] }} {{ $data['givenName'] }}</td>
+                        <th>No</th>
+                        <th>Prayer Title</th>
+                        <th>#Details</th>
+                        <th>Participant</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    @if(count($data['answers']) >= 2)
+                        <tr>
+                            <td rowspan="2">1-2</td>
+                            <td rowspan="2">
+                                {{ $blessingTypes[key($data['answers'])] }}<br>
+                                {{ $blessingTypes[key(array_slice($data['answers'], 1, 1, true))] }}
+                            </td>
+                            <td rowspan="2">
+                                <strong>{{ reset($data['answers'])['answer'] }}<br>
+                                {{ next($data['answers'])['answer'] }}</strong>
+                            </td>
+                            <td rowspan="2">{{ $data['surname'] }} {{ $data['givenName'] }}</td>
+                        </tr>
+                        <tr></tr>
+                    @endif
+
+
+                    @foreach ($data['answers'] as $blessingTypeId => $answerData)
+                        @if ($loop->iteration == 3)
+                            <tr>
+                                <td>3</td>
+                                <td>{{ $blessingTypes[$blessingTypeId] }}</td>
+                                <td><strong>{{ $answerData['answer'] }}</strong></td>
+                                <td>{{ $data['surname'] }} {{ $data['givenName'] }}</td>
+                            </tr>
+                        @elseif ($loop->iteration > 2)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td colspan="2">
+                                    @php
+                                        $answers = explode('|', $answerData['answer']);
+                                        $titleWithAnswer = $blessingTypes[$blessingTypeId];
+                                        foreach ($answers as $answer) {
+                                            $titleWithAnswer = preg_replace('/（-）/', ' (<strong>' . trim($answer) . '</strong>) ', $titleWithAnswer, 1);
+                                        }
+                                    @endphp
+                                    {!! $titleWithAnswer !!}
+                                </td>
+                                <td>{{ $data['surname'] }} {{ $data['givenName'] }}</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+
+
+
+            <div class="user-details pt-3">
+                <p>中心全体仝仁以慈悲欢喜心来启建普明大日如来沙坛城超渡及火供大法会，一律随缘，不分种族贫富。愿以此功德力普皆回向佛法常往，世界和平，国泰民安，风调雨顺，五谷丰登。愿十方一切父母众生，丰衣足食，离苦得乐，各满其愿，往生善道，解冤释结，早证菩提</p>
+                <p>祝愿：吉祥安详，如意富裕，福寿安康，福慧双修</p>
+                <div class="d-flex justify-content-between">
+                    <p>（如家境貧困，請注 “貧困” 超渡免費 一切隨緣）</p>
+                    <p>隨緣金共  <strong>RM{{ $data['amount'] }}</strong></p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="my-3">
+                <p>功德主姓名：<strong>{{ $data['surname'] }} {{ $data['givenName'] }}</strong></p>
+                <p>聯絡電話/電郵：<strong>{{ $data['email'] }}</strong></p>
+            </div>
+        </div>
 
 
         <!-- Payment Method Selection -->
@@ -143,7 +232,7 @@
             .then(data => {
                 if (data.success) {
                     alert('Donation submitted successfully!');
-                    window.location.href = '/';
+                    window.location.href = '/thankyou';
                 } else {
                     alert('There was a problem submitting your donation.');
                 }

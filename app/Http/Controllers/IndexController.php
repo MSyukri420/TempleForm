@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
-    // Show the contribution page
+    // Show the index page
     public function showIndex()
     {
         $users = User::all();
@@ -27,21 +27,19 @@ class IndexController extends Controller
     {
         // Assuming you have a UserFormBlessing model set up for your 'user_form_blessings' table
         $userId = auth()->user()->id; // Get the current logged-in user's ID
-        $userForms = UserForm::with(['userFormBlessings'])
-                    ->where('user_id', $userId)
-                    ->get();
+        $userForms = UserForm::where('user_id', auth()->id())->paginate(5);
 
         // Pass the data to the profile view
         return view('profile', compact('userForms'));
     }
 
 
-    // Show the contribution page
-    public function showContribution()
+    // Show the prayer page
+    public function showPrayer()
     {
         $blessingTypes = BlessingType::all();
         $users = User::all();
-        return view('contribution', compact('blessingTypes', 'users'));
+        return view('prayer', compact('blessingTypes', 'users'));
     }
 
 
@@ -55,16 +53,17 @@ class IndexController extends Controller
 
     public function previewDonation(Request $request)
     {
+        Log::info('Donation Preview Request: ' . json_encode($request->all()));
         // Perform validation as before
         $validatedData = Validator::make($request->all(), [
             'surname' => 'required|string|max:255',
             'givenName' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
-            'contact' => 'required|string|digits:11',
+            'contact' => 'required|string|digits_between:10,11',
             'amount' => 'required|numeric|min:1',
             'answers' => 'required|array',
-            'answers.*.answer' => 'required|string',
+            'answers.*.answer' => 'nullable|string',
         ]);
 
         if ($validatedData->fails()) {
@@ -94,10 +93,10 @@ class IndexController extends Controller
             'givenName' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
-            'contact' => 'required|string|digits:11',
+            'contact' => 'required|string|digits_between:10,11',
             'amount' => 'required|numeric|min:1',
             'answers' => 'required|array',
-            'answers.*.answer' => 'required|string',
+            'answers.*.answer' => 'nullable|string',
         ]);
 
         if ($validatedData->fails()) {
@@ -110,12 +109,12 @@ class IndexController extends Controller
 
         // Get the currently authenticated user
         $user = Auth::user();
+        $userId = optional($user)->id;
 
         DB::beginTransaction();
         try {
-            // Assume you have a UserForm model that handles form submissions
             $userForm = UserForm::create([
-                'user_id' => $user->id,
+                'user_id' => $userId,
                 'surname' => $data['surname'],
                 'givenName' => $data['givenName'],
                 'address' => $data['address'],
@@ -124,30 +123,31 @@ class IndexController extends Controller
                 'amount' => $data['amount'],
             ]);
 
-            // Save the blessing types and answers
             if (isset($data['answers'])) {
                 foreach ($data['answers'] as $blessingTypeId => $answerData) {
-                    // Check if answerData is an array and has an 'answer' key
-                    if (is_array($answerData) && isset($answerData['answer'])) {
-                        // Create UserFormBlessing for each blessing type and answer
-                        $blessing = new UserFormBlessing([
-                            'user_form_id' => $userForm->id,
-                            'blessing_type_id' => $blessingTypeId,
-                            'answer' => $answerData['answer'], // Access the 'answer' key from the answerData array
-                        ]);
-                        $blessing->save();
-                    }
+                    $answer = $answerData['answer'] ?? '';
+
+                    $blessing = new UserFormBlessing([
+                        'user_form_id' => $userForm->id,
+                        'blessing_type_id' => $blessingTypeId,
+                        'answer' => $answer,
+                    ]);
+                    $blessing->save();
                 }
             }
 
-            // Commit the transaction
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Donation successfully processed.']);
         } catch (\Exception $e) {
-            // An error occurred; rollback the transaction
             DB::rollBack();
             Log::error('Error occurred: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
             return response()->json(['success' => false, 'message' => 'An error occurred while processing the donation.']);
         }
+    }
+
+
+    public function thankyou()
+    {
+        return view('donation.thankyou');
     }
 }

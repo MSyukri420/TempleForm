@@ -9,7 +9,7 @@ class UserFormBlessing extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_form_id', 'blessing_type_id', 'answer'];
+    protected $fillable = ['user_form_id', 'blessing_type_id', 'answer', 'print_count'];
 
     // UserFormBlessing belongs to a UserForm
     public function userForm()
