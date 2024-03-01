@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('contact')->unique();
             $table->string('password');
+            $table->boolean('is_admin')->default(false);
             $table->timestamps();
         });
     }

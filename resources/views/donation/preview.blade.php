@@ -22,6 +22,7 @@
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js" integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
@@ -75,15 +76,19 @@
             </div>
         </div>
 
-        <div>
-            <div style="display:flex;width:80%;align-items:center;justify-content:center;margin:auto;padding:30px 0;">
-                <img src="assets/img/form_logo.png" style="width:15%"/>
-                <div style="display:flex;flex-direction:column;gap:0;align-items:center;width:75%">
-                    <div style="font-size:2.5vw;font-weight:600;text-align:center;letter-spacing:1.5px;font-family:chinese;">佛教金剛乘精舍<span style="font-size:12px">(釋迦中心)</span></div>
-                    <div style="font-size:1.39vw;font-family:Roboto;font-weight:900;letter-spacing:0.5px;text-align:center;">PUSAT BUDDHA VAJRAYANA KUCHING <br> VAJRAYANA BUDDHIST CENTRE KUCHING</div>
-                    <div style="font-size:1.25vw;font-family:Roboto;font-weight:900;text-align:center;">(Sakya Chosphel Ling)</div>
-                    <div style="font-size:1.32vw;font-family:Roboto;font-weight:900;text-align:center;">28, PEACE ROAD, 93450 KUCHING. TEL/FAX:6082-337512</div>
-                    <div style="font-size:1.11vw;font-family:Roboto;font-weight:900;text-align:center;">website: www.sakyachosphelling.com &nbsp; email: sakya_chosphel@yahoo.com </div>
+        <div id="image" style="background:white;padding:15px;">
+            <div class="container my-4">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-sm-3 col-lg-2 mb-3 text-center">
+                        <img src="assets/img/form_logo.png" class="img-fluid" style="height: 200px;" alt="Logo"/>
+                    </div>
+                    <div class="col-sm-9 col-lg-6">
+                        <h2 class="text-center fs-3 fw-bold mb-2" style="font-family: 'Chinese font', sans-serif;">佛教金剛乘精舍<span class="fs-6">(釋迦中心)</span></h2>
+                        <p class="text-center fs-6 fw-bold mb-1">PUSAT BUDDHA VAJRAYANA KUCHING <br> VAJRAYANA BUDDHIST CENTRE KUCHING</p>
+                        <p class="text-center fs-6 fw-bold mb-1">(Sakya Chosphel Ling)</p>
+                        <p class="text-center fs-6 fw-bold mb-1">28, PEACE ROAD, 93450 KUCHING. TEL/FAX:6082-337512</p>
+                        <p class="text-center fw-bold" style="font-size: 12px">website: www.sakyachosphelling.com &nbsp; email: sakya_chosphel@yahoo.com</p>
+                    </div>
                 </div>
             </div>
 
@@ -93,47 +98,46 @@
                     <tr>
                         <th>No</th>
                         <th>Prayer Title</th>
-                        <th>#Details</th>
+                        <th>Details</th>
                         <th>Participant</th>
                     </tr>
-                    @if(count($data['answers']) >= 2)
-                        <tr>
-                            <td rowspan="2">1-2</td>
-                            <td rowspan="2">
-                                {{ $blessingTypes[key($data['answers'])] }}<br>
-                                {{ $blessingTypes[key(array_slice($data['answers'], 1, 1, true))] }}
-                            </td>
-                            <td rowspan="2">
-                                <strong>{{ reset($data['answers'])['answer'] }}<br>
-                                {{ next($data['answers'])['answer'] }}</strong>
-                            </td>
-                            <td rowspan="2">{{ $data['surname'] }} {{ $data['givenName'] }}</td>
-                        </tr>
-                        <tr></tr>
-                    @endif
+                    @foreach ($blessingTypes as $typeId => $type)
 
+                    @php
+                        $answersArray = explode('|', $answers[$typeId] ?? '');
+                        $title = $type->title;
+                        foreach ($answersArray as $answer) {
+                            $title = preg_replace('/（-）/', '<strong> (' . $answer . ') </strong>', $title, 1);
+                        }
+                    @endphp
 
-                    @foreach ($data['answers'] as $blessingTypeId => $answerData)
-                        @if ($loop->iteration == 3)
+                        @if ($loop->first)
                             <tr>
-                                <td>3</td>
-                                <td>{{ $blessingTypes[$blessingTypeId] }}</td>
-                                <td><strong>{{ $answerData['answer'] }}</strong></td>
-                                <td>{{ $data['surname'] }} {{ $data['givenName'] }}</td>
+                                <td rowspan="2">1-2</td>
+                                <td>{{ $type->title }}</td>
+                                <td>
+                                    <strong>{{ $answers[$typeId] ?? '' }}<strong>
+                                </td>
+                                <td rowspan="2">{{ $data['surname'] }} {{ $data['givenName'] }}</td>
                             </tr>
-                        @elseif ($loop->iteration > 2)
+                        @elseif ($loop->iteration == 2)
+                            <tr>
+                                <td>{{ $type->title }}</td>
+                                <td>
+                                    <strong>{{ $answers[$typeId] ?? '' }}<strong>
+                                </td>
+                            </tr>
+                        @elseif ($loop->iteration == 3)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td colspan="2">
-                                    @php
-                                        $answers = explode('|', $answerData['answer']);
-                                        $titleWithAnswer = $blessingTypes[$blessingTypeId];
-                                        foreach ($answers as $answer) {
-                                            $titleWithAnswer = preg_replace('/（-）/', ' (<strong>' . trim($answer) . '</strong>) ', $titleWithAnswer, 1);
-                                        }
-                                    @endphp
-                                    {!! $titleWithAnswer !!}
-                                </td>
+                                <td>{{ $type->title }}</td>
+                                <td><strong>{{ $answers[$typeId] ?? '' }}<strong></td>
+                                <td>{{ $data['surname'] }} {{ $data['givenName'] }}</td>
+                            </tr>
+                        @else
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td colspan="2">{!! $title !!}</td>
                                 <td>{{ $data['surname'] }} {{ $data['givenName'] }}</td>
                             </tr>
                         @endif
@@ -203,7 +207,7 @@
             @foreach ($data['answers'] as $blessingTypeId => $answerData)
                 <input type="hidden" name="answers[{{ $blessingTypeId }}][answer]" value="{{ $answerData['answer'] }}">
             @endforeach
-            <button type="submit" class="btn btn-primary">Confirm Donation</button>
+            <button type="submit" class="btn btn-primary" id="confirmDonationButton">Confirm Donation</button>
         </form>
     </div>
 
@@ -218,29 +222,42 @@
 
         document.getElementById('combinedDonationForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Collect all form data
-            var formData = new FormData(this);
-            // Perform the AJAX request
-            fetch('/submit-donation', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Donation submitted successfully!');
-                    window.location.href = '/thankyou';
-                } else {
-                    alert('There was a problem submitting your donation.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+
+            // Assuming 'previewSection' is the ID of the element you want to capture
+            domtoimage.toBlob(document.getElementById('image'))
+                .then(function(blob) {
+                    var formData = new FormData(e.target); // Get the form data from the event target
+
+                    // Append the blob as 'image'
+                    formData.append('donationImage', blob, 'donation.png');
+
+                    // Perform the AJAX request
+                    fetch('/submit-donation', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Donation submitted successfully!');
+                            window.location.href = data.redirectUrl;
+                        } else {
+                            alert('There was a problem submitting your donation.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Could not convert to image', error);
+                });
         });
+
+
     </script>
 
 

@@ -48,14 +48,18 @@
 
 <body>
     <div class="container">
-        <div style="display:flex;width:80%;align-items:center;justify-content:center;margin:auto;max-width:595px;max-width:595px;padding:30px 0;">
-            <img src="/assets/img/form_logo.png" style="width:25%"/>
-            <div style="display:flex;flex-direction:column;gap:0;align-items:center;width:75%">
-                <div style="font-size:32px;font-weight:600;text-align:center;letter-spacing:1.5px;font-family:chinese;">佛教金剛乘精舍<span style="font-size:12px">(釋迦中心)</span></div>
-                <div style="font-size:16px;font-family:Roboto;font-weight:900;letter-spacing:0.5px;text-align:center;">PUSAT BUDDHA VAJRAYANA KUCHING <br> VAJRAYANA BUDDHIST CENTRE KUCHING</div>
-                <div style="font-size:14px;font-family:Roboto;font-weight:900;text-align:center;">(Sakya Chosphel Ling)</div>
-                <div style="font-size:15px;font-family:Roboto;font-weight:900;text-align:center;">28, PEACE ROAD, 93450 KUCHING. TEL/FAX:6082-337512</div>
-                <div style="font-size:12px;font-family:Roboto;font-weight:900;text-align:center;">website: www.sakyachosphelling.com &nbsp; email: sakya_chosphel@yahoo.com </div>
+        <div class="container my-4">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-sm-3 col-lg-2 mb-3 text-center">
+                    <img src="/assets/img/form_logo.png" class="img-fluid" style="height: 200px;" alt="Logo"/>
+                </div>
+                <div class="col-sm-9 col-lg-6">
+                    <h2 class="text-center fs-3 fw-bold mb-2" style="font-family: 'Chinese font', sans-serif;">佛教金剛乘精舍<span class="fs-6">(釋迦中心)</span></h2>
+                    <p class="text-center fs-6 fw-bold mb-1">PUSAT BUDDHA VAJRAYANA KUCHING <br> VAJRAYANA BUDDHIST CENTRE KUCHING</p>
+                    <p class="text-center fs-6 fw-bold mb-1">(Sakya Chosphel Ling)</p>
+                    <p class="text-center fs-6 fw-bold mb-1">28, PEACE ROAD, 93450 KUCHING. TEL/FAX:6082-337512</p>
+                    <p class="text-center fw-bold" style="font-size: 12px">website: www.sakyachosphelling.com &nbsp; email: sakya_chosphel@yahoo.com</p>
+                </div>
             </div>
         </div>
 
@@ -64,58 +68,51 @@
                 <tr>
                     <th>No</th>
                     <th>Blessing Type Title</th>
-                    <th>People</th>
-                    <th>Name</th>
+                    <th>Details</th>
+                    <th>Participant</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- First two rows are merged -->
-                @for ($index = 0; $index < min(2, count($userForm->userFormBlessings)); $index++)
-                    <tr>
-                        @if ($index == 0)
-                            <td rowspan="2">1-2</td>
-                            <td rowspan="2">
-                                {{ $userForm->userFormBlessings[0]->blessingType->title }}<br>
-                                {{ $userForm->userFormBlessings[1]->blessingType->title }}
-                            </td>
-                            <td rowspan="2">
-                                <strong>{{ $userForm->userFormBlessings[0]->answer }}<br>
-                                {{ $userForm->userFormBlessings[1]->answer }}</strong>
-                            </td>
-                        @endif
-                        <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
-                    </tr>
-                @endfor
+                @foreach ($blessingTypes as $typeId => $type)
+                @php
+                    $answersArray = explode('|', $answers[$typeId]->answer ?? '');
+                    $title = $type->title;
+                    foreach ($answersArray as $answer) {
+                        $title = preg_replace('/（-）/', '<strong> (' . $answer . ') </strong>', $title, 1);
+                    }
+                @endphp
 
-                <!-- Third row with separate columns for Blessing Type Title and People -->
-                @if (count($userForm->userFormBlessings) > 2)
-                    <tr>
-                        <td>3</td>
-                        <td>{{ $userForm->userFormBlessings[2]->blessingType->title }}</td>
-                        <td><strong>{{ $userForm->userFormBlessings[2]->answer }}</strong></td>
-                        <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
-                    </tr>
-                @endif
-
-                @foreach ($userForm->userFormBlessings as $index => $blessing)
-                    @if ($index > 2)
+                    @if ($loop->first)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td colspan="2">
-                                @php
-                                    $answers = explode('|', $blessing->answer);
-                                    $titleWithAnswer = $blessing->blessingType->title;
-                                    foreach ($answers as $key => $answer) {
-                                        // Replace the first occurrence of `(-)` with each answer
-                                        $titleWithAnswer = preg_replace('/（-）/', ' (<strong>' . trim($answer) . '</strong>) ', $titleWithAnswer, 1);
-                                    }
-                                @endphp
-                                {!! $titleWithAnswer !!}
+                            <td rowspan="2">1-2</td>
+                            <td>{{ $type->title }}</td>
+                            <td>
+                                <strong>{{ $answers[$typeId]->answer ?? '' }}<strong>
                             </td>
+                            <td rowspan="2">{{ $userForm->surname }} {{ $userForm->givenName }}</td>
+                        </tr>
+                    @elseif ($loop->iteration == 2)
+                        <tr>
+                            <td>{{ $type->title }}</td>
+                            <td>
+                                <strong>{{ $answers[$typeId]->answer ?? '' }}<strong>
+                            </td>
+                        </tr>
+                    @elseif ($loop->iteration == 3)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $type->title }}</td>
+                            <td><strong>{{ $answers[$typeId]->answer ?? '' }}<strong></td>
+                                <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td colspan="2">{!! $title !!}</td>
                             <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
                         </tr>
                     @endif
-                @endforeach
+            @endforeach
             </tbody>
         </table>
 

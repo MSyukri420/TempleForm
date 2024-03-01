@@ -120,8 +120,7 @@
                                                                 {{ $index == 8 ? 'auto-populate-address' : '' }}
                                                                 {{ $index == 9 ? 'auto-populate-fullname' : '' }}"
                                                 name="answers[{{ $type->id }}][answer]"
-                                                id="blessingType{{ $type->id }}"
-                                                style="{{ $index == 7 ? 'display: none;' : '' }}">
+                                                id="blessingType{{ $type->id }}">
                                         @endif
                                     </div>
                                 </div>
@@ -167,6 +166,9 @@
                     input.disabled = !checkbox.checked;
                     if (!checkbox.checked) {
                         input.value = '';
+                        input.removeAttribute('required'); // Remove required attribute when checkbox is unchecked
+                    } else {
+                        input.setAttribute('required', ''); // Add required attribute when checkbox is checked
                     }
                 });
             }
@@ -222,7 +224,7 @@
                 if ({{$index}} == 5) {
                     const input1 = document.getElementById('blessingType{{$type->id}}_1');
                     const input2 = document.getElementById('blessingType{{$type->id}}_2');
-                    const combinedValue = input1.value + ' | ' + input2.value;
+                    const combinedValue = input1.value + '|' + input2.value;
                     document.getElementById('blessingType{{$type->id}}').value = combinedValue;
                 }
                 @endforeach

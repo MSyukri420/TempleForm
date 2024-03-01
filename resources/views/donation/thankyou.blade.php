@@ -6,8 +6,6 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>Thank You</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
 
     <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
@@ -38,10 +36,19 @@
 
 <body>
 
-    <div class="container">
-        <h1>Thank You!</h1>
-        <p>Your submission has been received.</p>
-        <a href="/">Back to Homepage</a>
+    <div class="container py-5">
+        <div class="text-center">
+            <h1 class="mb-3">Thank You!</h1>
+            @if(isset($userForm))
+                <p class="lead">Your submission has been received. An email has been sent to you for reference as well</p>
+                <p>Your Transaction ID is: <strong>#{{ $userForm->id ?? 'N/A' }}</strong></p>
+                <p>Submission Time: <strong>{{ $userForm->created_at ? $userForm->created_at->format('d/m/Y (g.ia)') : 'N/A' }}</strong></p>
+                <p>Donation Amount: <strong>RM{{ number_format($userForm->amount ?? 0, 2) }}</strong></p>
+            @else
+                <p class="lead">We could not find your submission details. Please contact support if you think this is an error.</p>
+            @endif
+            <a href="/" class="btn btn-primary mt-4">Back to Homepage</a>
+        </div>
     </div>
 
 </body>

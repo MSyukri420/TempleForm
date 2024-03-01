@@ -21,16 +21,11 @@
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js" integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
     <style>
-        @font-face {
-            font-family: chinese;
-            src: url(wt064.ttf);
-        }
-
-        /* Add your custom styles here */
         .form-display-table {
             width: 100%;
             margin-bottom: 20px;
@@ -43,6 +38,10 @@
         .form-display-table th {
             background-color: #f2f2f2;
         }
+        .print-area {
+            background: white;
+            padding: 20px;
+        }
     </style>
 </head>
 
@@ -53,11 +52,9 @@
         <h2 class="mb-4 text-center">Previous Participation</h2>
         <div class="accordion" id="previousParticipationAccordion">
             @foreach ($userForms as $index => $userForm)
-                <!-- Accordion item -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading{{ $userForm->id }}">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#formDetails{{ $userForm->id }}" aria-expanded="true" aria-controls="formDetails{{ $userForm->id }}">
-                            <!-- Include transaction details in the button -->
                             <div class="w-100 d-flex">
                                 <span>Transaction #{{ $userForm->id  }}</span>
                                 <span class="px-4">{{ $userForm->created_at->format('d/m/Y (g.ia)') }}</span>
@@ -67,7 +64,6 @@
                     </h2>
                     <div id="formDetails{{ $userForm->id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $userForm->id }}" data-bs-parent="#previousParticipationAccordion">
                         <div class="accordion-body">
-                            <!-- Tab navigation -->
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="form-tab-{{ $userForm->id }}" data-bs-toggle="tab" data-bs-target="#form{{ $userForm->id }}" type="button" role="tab" aria-controls="form" aria-selected="true">Form Details</button>
@@ -78,24 +74,27 @@
                             </ul>
 
 
-                            <!-- Tab content -->
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active" id="form{{ $userForm->id }}" role="tabpanel" aria-labelledby="form-tab-{{ $userForm->id }}">
 
                                     <div class="my-3">
                                         <button onclick="printDiv('formDetailsPrintArea{{ $userForm->id }}')" class="btn btn-primary">Print Form Details</button>
-                                        <button onclick="printDiv('formDetailsPrintArea{{ $userForm->id }}')" class="btn btn-primary">Download Form</button>
+                                        <button onclick="downloadImage('formDetailsPrintArea{{ $userForm->id }}')" class="btn btn-primary">Download as Image</button>
                                     </div>
 
                                     <div id="formDetailsPrintArea{{ $userForm->id }}" class="print-area">
-                                        <div style="display:flex;width:80%;align-items:center;justify-content:center;margin:auto;max-width:595px;max-width:595px;padding:30px 0;">
-                                            <img src="assets/img/form_logo.png" style="width:25%"/>
-                                            <div style="display:flex;flex-direction:column;gap:0;align-items:center;width:75%">
-                                                <div style="font-size:32px;font-weight:600;text-align:center;letter-spacing:1.5px;font-family:chinese;">佛教金剛乘精舍<span style="font-size:12px">(釋迦中心)</span></div>
-                                                <div style="font-size:16px;font-family:Roboto;font-weight:900;letter-spacing:0.5px;text-align:center;">PUSAT BUDDHA VAJRAYANA KUCHING <br> VAJRAYANA BUDDHIST CENTRE KUCHING</div>
-                                                <div style="font-size:14px;font-family:Roboto;font-weight:900;text-align:center;">(Sakya Chosphel Ling)</div>
-                                                <div style="font-size:15px;font-family:Roboto;font-weight:900;text-align:center;">28, PEACE ROAD, 93450 KUCHING. TEL/FAX:6082-337512</div>
-                                                <div style="font-size:12px;font-family:Roboto;font-weight:900;text-align:center;">website: www.sakyachosphelling.com &nbsp; email: sakya_chosphel@yahoo.com </div>
+                                        <div class="container my-4">
+                                            <div class="row align-items-center justify-content-center">
+                                                <div class="col-sm-3 col-lg-2 mb-3 text-center">
+                                                    <img src="assets/img/form_logo.png" class="img-fluid" style="height: 200px;" alt="Logo"/>
+                                                </div>
+                                                <div class="col-sm-9 col-lg-6">
+                                                    <h2 class="text-center fs-3 fw-bold mb-2" style="font-family: 'Chinese font', sans-serif;">佛教金剛乘精舍<span class="fs-6">(釋迦中心)</span></h2>
+                                                    <p class="text-center fs-6 fw-bold mb-1">PUSAT BUDDHA VAJRAYANA KUCHING <br> VAJRAYANA BUDDHIST CENTRE KUCHING</p>
+                                                    <p class="text-center fs-6 fw-bold mb-1">(Sakya Chosphel Ling)</p>
+                                                    <p class="text-center fs-6 fw-bold mb-1">28, PEACE ROAD, 93450 KUCHING. TEL/FAX:6082-337512</p>
+                                                    <p class="text-center fw-bold" style="font-size: 12px">website: www.sakyachosphelling.com &nbsp; email: sakya_chosphel@yahoo.com</p>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -104,57 +103,51 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Prayer Type Title</th>
-                                                    <th>#Details</th>
+                                                    <th>Details</th>
                                                     <th>Participant</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- First two rows are merged -->
-                                                @for ($index = 0; $index < min(2, count($userForm->userFormBlessings)); $index++)
-                                                    <tr>
-                                                        @if ($index == 0)
-                                                            <td rowspan="2">1-2</td>
-                                                            <td rowspan="2">
-                                                                {{ $userForm->userFormBlessings[0]->blessingType->title }}<br>
-                                                                {{ $userForm->userFormBlessings[1]->blessingType->title }}
-                                                            </td>
-                                                            <td rowspan="2">
-                                                                <strong>{{ $userForm->userFormBlessings[0]->answer }}<br>
-                                                                {{ $userForm->userFormBlessings[1]->answer }}</strong>
-                                                            </td>
-                                                        @endif
-                                                        <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
-                                                    </tr>
-                                                @endfor
+                                                @foreach ($blessingTypes as $typeId => $type)
+                                                @php
+                                                    $answersArray = explode('|', $answers[$typeId]->answer ?? '');
+                                                    $title = $type->title;
+                                                    foreach ($answersArray as $answer) {
+                                                        $title = preg_replace('/（-）/', '<strong> (' . $answer . ') </strong>', $title, 1);
+                                                    }
+                                                @endphp
 
-                                                <!-- Third row with separate columns for Blessing Type Title and People -->
-                                                @if (count($userForm->userFormBlessings) > 2)
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>{{ $userForm->userFormBlessings[2]->blessingType->title }}</td>
-                                                        <td><strong>{{ $userForm->userFormBlessings[2]->answer }}</strong></td>
-                                                        <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
-                                                    </tr>
-                                                @endif
-
-                                                @foreach ($userForm->userFormBlessings as $index => $blessing)
-                                                    @if ($index > 2)
+                                                    @if ($loop->first)
                                                         <tr>
-                                                            <td>{{ $index + 1 }}</td>
-                                                            <td colspan="2">
-                                                                @php
-                                                                    $answers = explode('|', $blessing->answer);
-                                                                    $titleWithAnswer = $blessing->blessingType->title;
-                                                                    foreach ($answers as $key => $answer) {
-                                                                        $titleWithAnswer = preg_replace('/（-）/', ' (<strong>' . trim($answer) . '</strong>) ', $titleWithAnswer, 1);
-                                                                    }
-                                                                @endphp
-                                                                {!! $titleWithAnswer !!}
+                                                            <td rowspan="2">1-2</td>
+                                                            <td>{{ $type->title }}</td>
+                                                            <td>
+                                                                <strong>{{ $answers[$typeId]->answer ?? '' }}<strong>
                                                             </td>
+                                                            <td rowspan="2">{{ $userForm->surname }} {{ $userForm->givenName }}</td>
+                                                        </tr>
+                                                    @elseif ($loop->iteration == 2)
+                                                        <tr>
+                                                            <td>{{ $type->title }}</td>
+                                                            <td>
+                                                                <strong>{{ $answers[$typeId]->answer ?? '' }}<strong>
+                                                            </td>
+                                                        </tr>
+                                                    @elseif ($loop->iteration == 3)
+                                                        <tr>
+                                                            <td>{{ $loop->iteration }}</td>
+                                                            <td>{{ $type->title }}</td>
+                                                            <td><strong>{{ $answers[$typeId]->answer ?? '' }}<strong></td>
+                                                                <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
+                                                        </tr>
+                                                    @else
+                                                        <tr>
+                                                            <td>{{ $loop->iteration }}</td>
+                                                            <td colspan="2">{!! $title !!}</td>
                                                             <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
                                                         </tr>
                                                     @endif
-                                                @endforeach
+                                            @endforeach
                                             </tbody>
                                         </table>
 
@@ -181,8 +174,8 @@
                                 <div class="tab-pane fade" id="other{{ $userForm->id }}" role="tabpanel" aria-labelledby="other-tab-{{ $userForm->id }}">
 
                                     <div class="my-3">
-                                        <button onclick="printDiv('formDetailsPrintArea{{ $userForm->id }}')" class="btn btn-primary">Print Form Details</button>
-                                        <button onclick="printDiv('formDetailsPrintArea{{ $userForm->id }}')" class="btn btn-primary">Download Form</button>
+                                        <button onclick="printDiv('fullDetailsPrintArea{{ $userForm->id }}')" class="btn btn-primary">Print Full Details</button>
+                                        <button onclick="downloadImage('fullDetailsPrintArea{{ $userForm->id }}')" class="btn btn-primary">Download as Image</button>
                                     </div>
 
                                     <div id="fullDetailsPrintArea{{ $userForm->id }}" class="print-area">
@@ -209,7 +202,6 @@
                                         <div class="table-responsive">
                                             <h4 class="mb-3">Prayer Details</h4>
                                             <table class="form-display-table">
-                                                <!-- Use the layout provided in the images -->
                                                 <tbody>
                                                     <tr>
                                                         <th>No</th>
@@ -217,7 +209,6 @@
                                                         <th>#Details</th>
                                                         <th>Participant</th>
                                                     </tr>
-                                                    <!-- Loop through the blessings and answers -->
                                                     @foreach ($userForm->userFormBlessings as $blessing)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
@@ -287,10 +278,23 @@
         function printDiv(divId) {
             var printContents = document.getElementById(divId).innerHTML;
             var originalContents = document.body.innerHTML;
-
             document.body.innerHTML = printContents;
             window.print();
             document.body.innerHTML = originalContents;
+        }
+
+        function downloadImage(elementId) {
+            var node = document.getElementById(elementId);
+            domtoimage.toPng(node)
+                .then(function(dataUrl) {
+                    var link = document.createElement('a');
+                    link.download = 'details.png';
+                    link.href = dataUrl;
+                    link.click();
+                })
+                .catch(function(error) {
+                    console.error('Error downloading image:', error);
+                });
         }
     </script>
 

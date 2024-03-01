@@ -12,34 +12,45 @@ use App\Models\UserFormBlessing;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DonationConfirmation;
+use Illuminate\Support\Facades\Storage;
+use App\Models\GalleryImage;
 
 class IndexController extends Controller
 {
-    // Show the index page
     public function showIndex()
     {
         $users = User::all();
-        return view('index', compact('users'));
+        $galleryImages = GalleryImage::all();
+        $categories = GalleryImage::select('category')->distinct()->pluck('category');
+        return view('index', compact('users', 'galleryImages', 'categories'));
+    }
+
+    public function showPrayer()
+    {
+        $blessingTypes = BlessingType::all();
+        $users = User::all();
+        $galleryImages = GalleryImage::all();
+        $categories = GalleryImage::select('category')->distinct()->pluck('category');
+        return view('prayer', compact('blessingTypes', 'users', 'galleryImages', 'categories'));
     }
 
 
     public function showProfile()
     {
-        // Assuming you have a UserFormBlessing model set up for your 'user_form_blessings' table
-        $userId = auth()->user()->id; // Get the current logged-in user's ID
-        $userForms = UserForm::where('user_id', auth()->id())->paginate(5);
+        $userId = auth()->user()->id;
+        $userForms = UserForm::where('user_id', $userId)->paginate(10);
+        $blessingTypes = BlessingType::all()->keyBy('id');
 
-        // Pass the data to the profile view
-        return view('profile', compact('userForms'));
-    }
+        $userFormIds = $userForms->pluck('id');
+        $userFormBlessings = UserFormBlessing::whereIn('user_form_id', $userFormIds)->get();
 
+        $answers = $userFormBlessings->groupBy('blessing_type_id')->map(function ($item) {
+            return $item->first();
+        });
 
-    // Show the prayer page
-    public function showPrayer()
-    {
-        $blessingTypes = BlessingType::all();
-        $users = User::all();
-        return view('prayer', compact('blessingTypes', 'users'));
+        return view('profile', compact('userForms', 'blessingTypes', 'answers'));
     }
 
 
@@ -53,8 +64,6 @@ class IndexController extends Controller
 
     public function previewDonation(Request $request)
     {
-        Log::info('Donation Preview Request: ' . json_encode($request->all()));
-        // Perform validation as before
         $validatedData = Validator::make($request->all(), [
             'surname' => 'required|string|max:255',
             'givenName' => 'required|string|max:255',
@@ -67,18 +76,22 @@ class IndexController extends Controller
         ]);
 
         if ($validatedData->fails()) {
-            // Redirect back with errors
             return redirect()->back()->withErrors($validatedData->errors())->withInput();
         }
 
-        // Extract the validated data
         $data = $validatedData->validated();
 
-        // Retrieve the titles of the blessing types
-        $blessingTypes = BlessingType::findMany(array_keys($data['answers']))->pluck('title', 'id');
+        $blessingTypes = BlessingType::all()->keyBy('id');
 
-        // Pass the data to the preview view
-        return view('donation.preview', ['data' => $data, 'blessingTypes' => $blessingTypes]);
+        $answers = array_map(function ($type) use ($data) {
+            return isset($data['answers'][$type->id]) ? $data['answers'][$type->id]['answer'] : '';
+        }, $blessingTypes->all());
+
+        return view('donation.preview', [
+            'data' => $data,
+            'blessingTypes' => $blessingTypes,
+            'answers' => $answers
+        ]);
     }
 
 
@@ -100,14 +113,11 @@ class IndexController extends Controller
         ]);
 
         if ($validatedData->fails()) {
-            Log::info('Donation Validation Errors: ' . json_encode($validatedData->errors()));
             return response()->json(['success' => false, 'errors' => $validatedData->errors()]);
         }
 
-        // Extract the validated data
         $data = $validatedData->validated();
 
-        // Get the currently authenticated user
         $user = Auth::user();
         $userId = optional($user)->id;
 
@@ -136,8 +146,16 @@ class IndexController extends Controller
                 }
             }
 
+            $imagePath = null;
+            if ($request->hasFile('donationImage')) {
+                $imagePath = $request->file('donationImage')->store('donations');
+            }
+
+            Mail::to($request->input('email'))->send(new DonationConfirmation($userForm, $imagePath));
+
             DB::commit();
-            return response()->json(['success' => true, 'message' => 'Donation successfully processed.']);
+            $redirectUrl = route('thankyou', ['userFormId' => $userForm->id]);
+            return response()->json(['success' => true, 'message' => 'Donation successfully processed.', 'redirectUrl' => $redirectUrl]);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error occurred: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
@@ -146,8 +164,12 @@ class IndexController extends Controller
     }
 
 
-    public function thankyou()
+    public function thankyou(Request $request)
     {
-        return view('donation.thankyou');
+        $userFormId = $request->query('userFormId');
+        $userForm = UserForm::find($userFormId);
+
+
+        return view('donation.thankyou', compact('userForm'));
     }
 }

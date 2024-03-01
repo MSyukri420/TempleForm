@@ -48,18 +48,17 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
+                    <li class="breadcrumb-item active">Prayers</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
 
         <section class="section dashboard">
             <div class="row">
 
                 <section class="section dashboard">
                     <div class="row">
-                        {{-- Table for Blessing Types --}}
-                        <div class="col-12">
+                        <div class="col-9">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Prayer Types</h5>
@@ -74,35 +73,39 @@
                                         <tbody id="sortable">
                                             @foreach($blessingTypes as $index => $type)
                                             <tr data-id="{{ $type->id }}">
-                                                <td>{{ $index + 1 }}</td>
-                                                <td contenteditable="true" class="blessing-title">{{ $type->title }}</td>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td contenteditable="true" class="blessing-title">{{ $type->title ?? 'N/A' }}</td>
                                                 <td>
-                                                    <a href="/dashboard/prayers/view/{{ $type->id }}" class="btn btn-success btn-sm view-btn">View</a>
-                                                    <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $type->id }}">Delete</button>
+                                                    <div class="btn-group" role="group" aria-label="Form Actions">
+                                                        <a href="/dashboard/prayers/view/{{ $type->id }}" class="btn btn-primary btn-sm view-btn mb-2">View</a>
+                                                        <button class="btn btn-danger btn-sm delete-btn mb-2" data-id="{{ $type->id }}"><i class="bi bi-trash-fill"></i></button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                     <div class="mt-3">
-                                        <button id="saveOrderBtn" class="btn btn-success">Save</button>
+                                        <button id="saveOrderBtn" class="btn btn-primary">Save</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Form for Adding New Blessing Type --}}
-                        <div class="col-12">
+                        <div class="col-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Add New Blessing Type</h5>
+                                    <h5 class="card-title">Add Prayer Type</h5>
                                     <form id="addBlessingTypeForm">
                                         @csrf
                                         <div class="mb-3">
                                             <label for="blessingTypeTitle" class="form-label">Title</label>
                                             <input type="text" class="form-control" id="blessingTypeTitle" name="title" required>
+                                            <small class="form-text text-muted">
+                                                Use the symbol （-） where you want the answer to appear in the title. If it's not between words, place it at the end.
+                                            </small>
                                         </div>
-                                        <button type="submit" class="btn btn-success">Add</button>
+                                        <button type="submit" class="btn btn-primary">Add</button>
                                     </form>
                                 </div>
                             </div>
@@ -113,43 +116,11 @@
             </div>
         </section>
 
-    </main><!-- End #main -->
+    </main>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 
     <script>
-
-
-        $(document).ready(function() {
-            var el = document.getElementById('sortable');
-            var sortable = Sortable.create(el, {
-                animation: 150,
-                store: {
-                    set: function (sortable) {
-                        var order = sortable.toArray();
-                        fetch('/dashboard/prayers/update-order', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            },
-                            body: JSON.stringify({ order: order })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if(!data.success) {
-                                alert('Failed to update order');
-                            }
-                        })
-                        .catch(error => console.error('Error updating order:', error));
-                    }
-                }
-            });
-        });
-
-
-
-
 
 
         document.getElementById('addBlessingTypeForm').addEventListener('submit', function(e) {
@@ -195,7 +166,6 @@
                 return {
                     id: row.getAttribute('data-id'),
                     title: row.querySelector('.blessing-title').innerText,
-                    position: index + 1 // Assuming the first position is 1
                 };
             });
 
@@ -212,7 +182,7 @@
                 console.log(data);
                 if(data.success) {
                     alert('Titles updated successfully.');
-                    location.reload(); // Reload the page to see the changes
+                    location.reload();
                 }
             })
             .catch((error) => {

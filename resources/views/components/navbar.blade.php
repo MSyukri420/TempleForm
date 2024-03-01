@@ -5,11 +5,11 @@
 
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
-                <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-                <li><a class="nav-link scrollto" href="#tabs">About</a></li>
-                <li><a class="nav-link scrollto" href="#gallery">Gallery</a></li>
-                <li><a class="nav-link scrollto" href="#testimonials">Events</a></li>
-                <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                <li><a class="nav-link scrollto" href="/#hero">Home</a></li>
+                <li><a class="nav-link scrollto" href="/#tabs">About</a></li>
+                <li><a class="nav-link scrollto" href="/#gallery">Gallery</a></li>
+                <li><a class="nav-link scrollto" href="/#testimonials">Events</a></li>
+                <li><a class="nav-link scrollto" href="/#contact">Contact</a></li>
                 <li><a class="nav-link scrollto" href="/prayer">Prayer</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -22,11 +22,32 @@
                 </li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav><!-- .navbar -->
+        </nav>
 
-        <!-- Authentication Links -->
         @guest
             <a class="get-started-btn scrollto" data-bs-toggle="modal" data-bs-target="#authModal">Login</a>
+        @elseif(auth()->user()->is_admin)
+            <nav id="navbar" class="navbar ">
+                <li class="nav-item dropdown px-3" style="list-style-type: none;">
+                    <a class="nav-link dropdown-toggle p-0" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle px-1"> </i>Admin
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </nav>
         @else
             <nav id="navbar" class="navbar ">
                 <li class="nav-item dropdown px-3" style="list-style-type: none;">
@@ -93,6 +114,9 @@
                             </div>
                             <div class="mb-3">
                                 <p>Don't have an account? <a href="#" id="registerLink" style="color:grey">Register here</a></p>
+                            </div>
+                            <div class="mb-3">
+                                <a href="{{ route('password.request') }}" style="color:grey">Forgot Password?</a>
                             </div>
                             <button type="submit" class="btn btn-primary">Login</button>
                         </form>

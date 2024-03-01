@@ -49,40 +49,28 @@
         </div><!-- End Page Title -->
 
 
-        <form action="{{ url('/dashboard/users/search') }}" method="GET" class="my-3">
-            <div class="row g-3 align-items-center">
-                <div class="col-md-3">
-                    <label for="surname" class="form-label">Surname:</label>
-                    <input type="text" id="surname" name="surname" class="form-control" value="{{ request()->input('surname') }}">
-                </div>
-                <div class="col-md-3">
-                    <label for="givenName" class="form-label">Given Name:</label>
-                    <input type="text" id="givenName" name="givenName" class="form-control" value="{{ request()->input('givenName') }}">
-                </div>
-                <div class="col-md-2">
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" id="email" name="email" class="form-control" value="{{ request()->input('email') }}">
-                </div>
-                <div class="col-md-2">
-                    <label for="contact" class="form-label">Contact:</label>
-                    <input type="text" id="contact" name="contact" class="form-control" value="{{ request()->input('contact') }}">
-                </div>
-                <div class="col-md-2 align-self-end">
-                    <button type="submit" class="btn btn-primary w-100">Search</button>
-                </div>
+        <form action="{{ route('dashboard.users') }}" method="GET" class="my-3">
+            <div class="input-group mb-3">
+                <input type="text" id="surname" name="surname" class="form-control" placeholder="Surname" value="{{ request()->input('surname') }}">
+                <input type="text" id="givenName" name="givenName" class="form-control" placeholder="Given Name" value="{{ request()->input('givenName') }}">
+                <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="{{ request()->input('email') }}">
+                <input type="text" id="contact" name="contact" class="form-control" placeholder="Contact" value="{{ request()->input('contact') }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a href="{{ url('/dashboard/users') }}" class="btn btn-secondary">Reset</a>
             </div>
         </form>
 
+
         <!-- Users Section -->
-        <section class="section">
+        <section class="section dashboard">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Users</h4>
+                            <h4 class="card-title">Users</h4>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -96,12 +84,12 @@
                                 <tbody>
                                     @foreach ($users as $user)
                                         <tr>
-                                            <td>{{ $user->id }}</td>
-                                            <td>{{ $user->surname }}</td>
-                                            <td>{{ $user->givenName }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->address }}</td>
-                                            <td>{{ $user->contact }}</td>
+                                            <td>{{ $user->id ?? 'N/A' }}</td>
+                                            <td>{{ $user->surname ?? 'N/A' }}</td>
+                                            <td>{{ $user->givenName ?? 'N/A' }}</td>
+                                            <td>{{ $user->email ?? 'N/A' }}</td>
+                                            <td>{{ $user->address ?? 'N/A' }}</td>
+                                            <td>{{ $user->contact ?? 'N/A' }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -117,7 +105,7 @@
                                                 <!-- Previous Page Link -->
                                                 @if (!$users->onFirstPage())
                                                     <li class="page-item">
-                                                        <a class="page-link" href="{{ $users->previousPageUrl() }}" rel="prev">&laquo;</a>
+                                                        <a class="page-link" href="{{ $users->previousPageUrl() . '&' . http_build_query(request()->except('page')) }}" rel="prev">&laquo;</a>
                                                     </li>
                                                 @endif
 
@@ -130,7 +118,7 @@
                                                             </li>
                                                         @else
                                                             <li class="page-item">
-                                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                                                <a class="page-link" href="{{ $url . '&' . http_build_query(request()->except('page')) }}">{{ $page }}</a>
                                                             </li>
                                                         @endif
                                                     @endforeach
@@ -139,7 +127,7 @@
                                                 <!-- Next Page Link -->
                                                 @if ($users->hasMorePages())
                                                     <li class="page-item">
-                                                        <a class="page-link" href="{{ $users->nextPageUrl() }}" rel="next">&raquo;</a>
+                                                        <a class="page-link" href="{{ $users->nextPageUrl() . '&' . http_build_query(request()->except('page')) }}" rel="next">&raquo;</a>
                                                     </li>
                                                 @endif
                                             </ul>

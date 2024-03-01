@@ -9,8 +9,8 @@ use App\Models\UserForm;
 use App\Models\UserFormBlessing;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Barryvdh\Snappy\Facades\SnappyImage as Image;
-use Barryvdh\Snappy\Facades\SnappyPDF as PDF;
+use App\Models\GalleryImage;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -19,7 +19,7 @@ class DashboardController extends Controller
     public function show()
     {
         $users = User::latest()->take(5)->get();
-        $blessingTypes = BlessingType::orderBy('position', 'asc')->take(5)->get();
+        $blessingTypes = BlessingType::latest('created_at')->take(5)->get();
         $userForms = UserForm::with('user')->latest()->take(5)->get();
         $userFormBlessings = UserFormBlessing::latest()->take(5)->get();
 
@@ -31,41 +31,23 @@ class DashboardController extends Controller
     }
 
 
-    public function showDonationSubmissions()
+    public function showDonationSubmissions(Request $request)
     {
-        $users = User::all();
-        $userForms = UserForm::paginate(5);
-        $userFormBlessings = UserFormBlessing::all();
-        return view('dashboard.donation-submission', compact('users', 'userForms', 'userFormBlessings'));
-    }
+        $query = UserForm::query();
 
-    public function indexDonation(Request $request)
-    {
-        $transactionId = $request->input('transaction_id');
-        $surname = $request->input('surname');
-        $email = $request->input('email');
-        $contact = $request->input('contact');
-
-        $userForms = UserForm::with('user')
-                    ->when($transactionId, function ($query, $transactionId) {
-                        return $query->where('id', $transactionId);
-                    })
-                    ->when($surname, function ($query) use ($surname) {
-                        return $query->whereHas('user', function ($query) use ($surname) {
-                            $query->where('surname', 'like', "%{$surname}%");
-                        });
-                    })
-                    ->when($email, function ($query) use ($email) {
-                        return $query->whereHas('user', function ($query) use ($email) {
-                            $query->where('email', 'like', "%{$email}%");
-                        });
-                    })
-                    ->when($contact, function ($query) use ($contact) {
-                        return $query->whereHas('user', function ($query) use ($contact) {
-                            $query->where('contact', 'like', "%{$contact}%");
-                        });
-                    })
-                    ->paginate(5);
+        if ($request->filled('transaction_id')) {
+            $query->where('id', $request->input('transaction_id'));
+        }
+        if ($request->filled('surname')) {
+            $query->where('surname', 'like', '%' . $request->input('surname') . '%');
+        }
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->input('email') . '%');
+        }
+        if ($request->filled('contact')) {
+            $query->where('contact', 'like', '%' . $request->input('contact') . '%');
+        }
+        $userForms = $query->paginate(10);
 
         return view('dashboard.donation-submission', compact('userForms'));
     }
@@ -74,10 +56,16 @@ class DashboardController extends Controller
 
     public function showFormDetails($userFormId)
     {
-        $userForm = UserForm::with(['user', 'userFormBlessings.blessingType'])->findOrFail($userFormId);
+        $userForm = UserForm::find($userFormId);
+        $blessingTypes = BlessingType::all()->keyBy('id');
 
-        // You can pass more data as needed
-        return view('details.form', compact('userForm'));
+        $userFormBlessings = UserFormBlessing::where('user_form_id', $userForm->id)->get();
+
+        $answers = $userFormBlessings->groupBy('blessing_type_id')->map(function ($item) {
+            return $item->first();
+        });
+
+        return view('details.form', compact('userForm', 'blessingTypes', 'answers'));
     }
 
 
@@ -85,7 +73,6 @@ class DashboardController extends Controller
     {
         $userForm = UserForm::with(['user', 'userFormBlessings.blessingType'])->findOrFail($userFormId);
 
-        // You can pass more data as needed
         return view('details.full', compact('userForm'));
     }
 
@@ -97,38 +84,28 @@ class DashboardController extends Controller
     }
 
 
-    public function showUsers()
+    public function showUsers(Request $request)
     {
-        $users = User::paginate(5);
-        return view('dashboard.users', compact('users'));
-    }
+        $query = User::query();
 
-    public function indexUsers(Request $request)
-    {
-        $query = User::query(); // Start with all users
-
-        // Check if search parameters are present and not empty, then apply filters
-        if ($request->has('surname') && $request->surname != '') {
+        if ($request->filled('surname')) {
             $query->where('surname', 'like', '%' . $request->surname . '%');
         }
-
-        if ($request->has('givenName') && $request->givenName != '') {
+        if ($request->filled('givenName')) {
             $query->where('givenName', 'like', '%' . $request->givenName . '%');
         }
-
-        if ($request->has('email') && $request->email != '') {
+        if ($request->filled('email')) {
             $query->where('email', 'like', '%' . $request->email . '%');
         }
-
-        if ($request->has('contact') && $request->contact != '') {
+        if ($request->filled('contact')) {
             $query->where('contact', 'like', '%' . $request->contact . '%');
         }
 
-        // Paginate the results
-        $users = $query->paginate(5);
+        $users = $query->paginate(10);
 
         return view('dashboard.users', compact('users'));
     }
+
 
 
     public function addPrayerType(Request $request)
@@ -158,12 +135,10 @@ class DashboardController extends Controller
     }
 
 
-
-    public function updatePrayerType(Request $request, $id)
+    public function updatePrayer(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'position' => 'required|integer',
+            'blessings.*.title' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -173,20 +148,6 @@ class DashboardController extends Controller
             ], 422);
         }
 
-        $blessingType = BlessingType::findOrFail($id);
-        $blessingType->update([
-            'title' => $request->title,
-            'position' => $request->position,
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Blessing type updated successfully.',
-        ]);
-    }
-
-    public function updateOrder(Request $request)
-    {
         $blessings = $request->input('blessings', []);
         foreach ($blessings as $blessing) {
             $blessingType = BlessingType::find($blessing['id']);
@@ -199,15 +160,27 @@ class DashboardController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function viewBlessingType($id)
+    public function viewBlessingType(Request $request, $id)
     {
         $blessingType = BlessingType::findOrFail($id);
-        $allUserFormBlessings = UserFormBlessing::where('blessing_type_id', $id)->get();
-
-        $userFormBlessings = $allUserFormBlessings->filter(function ($blessing) {
-            return !empty($blessing->answer);
-        });
-
+        $query = UserFormBlessing::query()
+                ->where('blessing_type_id', $id)
+                ->where('answer', '!=', '')
+                ->whereNotNull('answer');
+        if ($request->filled('transaction_id')) {
+            $query->whereHas('userForm', function ($q) use ($request) {
+                $q->where('id', $request->transaction_id);
+            });
+        }
+        if ($request->filled('name')) {
+            $query->whereHas('userForm', function ($q) use ($request) {
+                $q->whereRaw("CONCAT(surname, ' ', givenName) LIKE ?", ["%{$request->name}%"]);
+            });
+        }
+        if ($request->filled('answer')) {
+            $query->where('answer', 'LIKE', "%{$request->answer}%");
+        }
+        $userFormBlessings = $query->paginate(15);
         return view('dashboard.prayer-answer', compact('blessingType', 'userFormBlessings'));
     }
 
@@ -216,38 +189,85 @@ class DashboardController extends Controller
     public function showPrayerAnswer(Request $request)
     {
         $answerIds = $request->input('userFormBlessings', []);
-        $answers = UserFormBlessing::with('blessingType')
-                                    ->whereIn('id', $answerIds)
-                                    ->get();
-        $answerPairs = collect();
-
-        foreach ($answers as $answer) {
-            if (in_array($answer->blessingType->id, [1, 2])) {
-                $relatedBlessingTypeId = $answer->blessingType->id == 1 ? 2 : 1;
-                $relatedAnswer = UserFormBlessing::where('blessing_type_id', $relatedBlessingTypeId)
-                                ->where('user_form_id', $answer->user_form_id)
-                                ->first();
-                if ($relatedAnswer) {
-                    $answerPairs->push([$answer, $relatedAnswer]);
-                }
-            } else {
-                $answerPairs->push([$answer]);
-            }
+        $answers = UserFormBlessing::whereIn('id', $answerIds)->get();
+        $blessingType = $answers->first()->blessingType;
+        if ($blessingType) {
+            $blessingTypeTitle = $blessingType->title;
         }
-
-        $blessingTypeTitle = $answers->first()->blessingType->title ?? 'Default Title';
-
-        return view('dashboard.prayer-print', compact('answerPairs', 'blessingTypeTitle'));
+        return view('dashboard.prayer-print', compact('answers', 'blessingTypeTitle', 'answerIds'));
     }
 
 
-    public function incrementPrintCount(Request $request)
+    public function downloadPrayerAnswer(Request $request)
     {
         $answerIds = $request->input('answerIds', []);
-        Log::info('Answer IDs: ' . json_encode($answerIds));
         UserFormBlessing::whereIn('id', $answerIds)->increment('print_count');
         return response()->json(['message' => 'Print count incremented successfully.']);
     }
 
+
+    public function showGalleryUploadForm()
+    {
+        $images = GalleryImage::all();
+        return view('dashboard.gallery-upload', compact('images'));
+    }
+
+    public function uploadGalleryImage(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string',
+            'image' => 'required|image',
+        ]);
+
+        $path = $request->file('image')->store('gallery', 'public');
+
+        GalleryImage::create([
+            'title' => $request->title,
+            'category' => $request->category,
+            'image' => $path,
+        ]);
+
+        return redirect()->back()->with('success', 'Image uploaded successfully.');
+    }
+
+    public function showEditGalleryImageForm($id)
+    {
+        $image = GalleryImage::findOrFail($id);
+        return view('dashboard.edit-gallery', compact('image'));
+    }
+
+    public function updateGalleryImage(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string',
+            'image' => 'nullable|image',
+        ]);
+
+        $image = GalleryImage::findOrFail($id);
+
+        $image->title = $request->title;
+        $image->category = $request->category;
+
+        if ($request->hasFile('image')) {
+            Storage::delete('public/'.$image->image);
+
+            $path = $request->file('image')->store('gallery', 'public');
+            $image->image = $path;
+        }
+
+        $image->save();
+
+        return redirect()->route('dashboard.gallery.upload.form')->with('success', 'Image updated successfully.');
+    }
+
+    public function deleteGalleryImage($id)
+    {
+        $image = GalleryImage::findOrFail($id);
+        Storage::delete('public/'.$image->image);
+        $image->delete();
+        return response()->json(['success' => 'Image deleted successfully.']);
+    }
 
 }

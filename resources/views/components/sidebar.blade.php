@@ -5,67 +5,41 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="/dashboard">
-                <i class="bi bi-grid"></i>
+                <i class="bi bi-house"></i>
                 <span>Dashboard</span>
             </a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="/dashboard/donation-submissions">
-                <i class="bi bi-people"></i>
+                <i class="bi bi-currency-dollar"></i>
                 <span>Donation Submission</span>
             </a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="/dashboard/users">
-                <i class="bi bi-people"></i>
+                <i class="bi bi-people-fill"></i>
                 <span>Users</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-journal-text"></i><span>Prayer</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link collapsed" href="/dashboard/prayers">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                <span>Prayer</span>
             </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="/dashboard/prayers">
-                        <i class="bi bi-circle"></i><span>Prayer Title</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/dashboard/prayers-answers">
-                        <i class="bi bi-circle"></i><span>Prayer Answer</span>
-                    </a>
-                </li>
-            </ul>
-        </li><!-- End Forms Nav -->
-
-        <li class="nav-heading">Pages</li>
+        </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>Profile</span>
+            <a class="nav-link collapsed" href="/dashboard/gallery-upload">
+                <i class="bi bi-images"></i>
+                <span>Gallery Upload</span>
             </a>
-        </li><!-- End Profile Page Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>F.A.Q</span>
-            </a>
-        </li><!-- End F.A.Q Page Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-contact.html">
-                <i class="bi bi-envelope"></i>
-                <span>Contact</span>
-            </a>
-        </li><!-- End Contact Page Nav -->
+        </li>
 
     </ul>
+
 
 </aside><!-- End Sidebar-->
 

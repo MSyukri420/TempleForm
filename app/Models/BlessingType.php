@@ -9,7 +9,7 @@ class BlessingType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'position'];
+    protected $fillable = ['title'];
 
     // BlessingType has many UserFormBlessings
     public function userFormBlessings()

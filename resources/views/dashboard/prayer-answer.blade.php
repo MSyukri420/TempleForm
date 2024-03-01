@@ -49,45 +49,93 @@
         </div>
 
 
+        <form action="{{ route('viewBlessingType', $blessingType->id) }}" method="GET">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Transaction ID" name="transaction_id" value="{{ request('transaction_id') }}">
+                <input type="text" class="form-control" placeholder="Name" name="name" value="{{ request('name') }}">
+                <input type="text" class="form-control" placeholder="Answer" name="answer" value="{{ request('answer') }}">
+                <button class="btn btn-primary" type="submit">Search</button>
+                <a href="{{ route('viewBlessingType', $blessingType->id) }}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+
+
 
         <section class="section dashboard">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">{{ $blessingType->title }}</h4>
                             <form action="{{ route('print.answers') }}" method="GET">
-                                @csrf
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <button type="button" id="selectAll">All</button>
-                                            </th>
-                                            <th>No</th>
-                                            <th>Transaction ID</th>
-                                            <th>Name</th>
-                                            <th>Answer</th>
-                                            <th>Created At</th>
-                                            <th>Print Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($userFormBlessings as $blessing)
-                                        <tr>
-                                            <td><input type="checkbox" name="userFormBlessings[]" value="{{ $blessing->id }}"></td>
-                                            <td>{{ $loop->iteration }})</td>
-                                            <td>#{{ $blessing->user_form_id }}</td>
-                                            <td>{{ $blessing->userForm->surname }} {{ $blessing->userForm->givenName }}</td>
-                                            <td>{{ $blessing->answer }}</td>
-                                            <td>{{ $blessing->created_at->format('M d, Y g:i A') }}</td>
-                                            <td>{{ $blessing->print_count }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <button type="submit">Print Selected Answers</button>
+                            @csrf
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h4 class="card-title">{{ $blessingType->title }}</h4>
+                                    <div>
+                                        <button type="button" id="selectAll" class="btn btn-secondary btn-sm mr-2">Select All</button>
+                                        <button type="submit" class="btn btn-primary btn-sm">Print Selected Answers</button>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">No</th>
+                                                <th scope="col">Transaction ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Answer</th>
+                                                <th scope="col">Created At</th>
+                                                <th scope="col">Print Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($userFormBlessings as $blessing)
+                                            <tr>
+                                                <td><input type="checkbox" name="userFormBlessings[]" value="{{ $blessing->id }}"></td>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>#{{ $blessing->user_form_id ?? 'N/A'}}</td>
+                                                <td>{{ $blessing->userForm->surname ?? 'N/A' }} {{ $blessing->userForm->givenName }}</td>
+                                                <td>{{ $blessing->answer ?? 'N/A' }}</td>
+                                                <td>{{ $blessing->created_at->format('M d, Y g:i A') ?? 'N/A' }}</td>
+                                                <td>{{ $blessing->print_count ?? 'N/A' }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </form>
+
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <p>Total Submissions: {{ $userFormBlessings->total() }}</p>
+                                    @if ($userFormBlessings->count() > 0)
+                                        <nav>
+                                            <ul class="pagination">
+                                                @if (!$userFormBlessings->onFirstPage())
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="{{ $userFormBlessings->previousPageUrl() . '&' . http_build_query(request()->except('page')) }}" rel="prev">&laquo;</a>
+                                                    </li>
+                                                @endif
+
+                                                @foreach (range(1, $userFormBlessings->lastPage()) as $page)
+                                                    <li class="page-item {{ $page == $userFormBlessings->currentPage() ? 'active' : '' }}">
+                                                        <a class="page-link" href="{{ $userFormBlessings->url($page) . '&' . http_build_query(request()->except('page')) }}">{{ $page }}</a>
+                                                    </li>
+                                                @endforeach
+
+                                                @if ($userFormBlessings->hasMorePages())
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="{{ $userFormBlessings->nextPageUrl() . '&' . http_build_query(request()->except('page')) }}" rel="next">&raquo;</a>
+                                                    </li>
+                                                @endif
+                                            </ul>
+                                        </nav>
+                                    @else
+                                        <p>No results found.</p>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,17 +148,11 @@
 
 
     <script>
-        // When the document is fully loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Listen for a click event on the 'Select All' button
             document.getElementById('selectAll').addEventListener('click', function() {
-                // Get all input elements within the table
                 const checkboxes = document.querySelectorAll('input[name="userFormBlessings[]"]');
-
-                // Check if any checkbox is not checked to determine the action to apply
                 const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
 
-                // Toggle the checked status of each checkbox
                 checkboxes.forEach(function(checkbox) {
                     checkbox.checked = !allChecked;
                 });
