@@ -29,41 +29,6 @@
 
 
     <style>
-        @media print {
-            main * {
-                display: none;
-            }
-
-            .page-break {
-                display: block;
-            }
-
-            .printable-table, .printable-table * {
-                display: block
-            }
-
-            .printable-table {
-                width: 100%;
-                position: absolute;
-                left: 0;
-                top: 100px;
-            }
-
-            .printable-table th, .printable-table td {
-                border: 1px solid #000;
-                text-align: center;
-                padding: 8px;
-            }
-
-            .printable-table th {
-                background-color: #f2f2f2;
-            }
-        }
-
-        .printable-table {
-            display: none;
-        }
-
         .scrollable-table {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -300,50 +265,6 @@
 
 
 
-
-
-
-    <script>
-        function printBlessingAnswers(blessingTypeId, blessingTypeTitle) {
-            var answers = document.querySelectorAll('#answers_for_' + blessingTypeId + ' .answer');
-            var printableTable = document.getElementById('printableTable');
-
-            printableTable.innerHTML = '';
-            var h2 = document.createElement('h2');
-            h2.innerText = blessingTypeTitle;
-            printableTable.appendChild(h2);
-
-            var tableDiv = document.createElement('div');
-            tableDiv.className = 'table-responsive mb-4';
-            var table = document.createElement('table');
-            table.className = 'table';
-            var tbody = table.createTBody();
-
-            for (let i = 0; i < answers.length; i++) {
-                if (i % 2 === 0 || i === 0) {
-                    var row = tbody.insertRow();
-                }
-
-                let cell = row.insertCell();
-                cell.innerText = answers[i].textContent;
-
-                if (i + 1 < answers.length) {
-                    let nextCell = row.insertCell();
-                    nextCell.innerText = answers[i + 1].textContent;
-                }
-
-                i++;
-            }
-
-            tableDiv.appendChild(table);
-            printableTable.appendChild(tableDiv);
-
-            printableTable.style.display = 'block';
-            window.print();
-            printableTable.style.display = 'none';
-        }
-
-    </script>
 
 
 

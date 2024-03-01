@@ -26,12 +26,6 @@
 
 
     <style>
-        @font-face {
-            font-family: chinese;
-            src: url(wt064.ttf);
-        }
-
-        /* Add your custom styles here */
         .form-display-table {
             width: 100%;
             margin-bottom: 20px;
@@ -72,7 +66,6 @@
         <div class="table-responsive">
             <h4 class="mb-3">Blessing Details</h4>
             <table class="form-display-table">
-                <!-- Use the layout provided in the images -->
                 <tbody>
                     <tr>
                         <th>No</th>
@@ -80,7 +73,6 @@
                         <th>Answer</th>
                         <th>Name</th>
                     </tr>
-                    <!-- Loop through the blessings and answers -->
                     @foreach ($userForm->userFormBlessings as $blessing)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
