@@ -209,12 +209,12 @@
                                                         <th>#Details</th>
                                                         <th>Participant</th>
                                                     </tr>
-                                                    @foreach ($userForm->userFormBlessings as $blessing)
+                                                    @foreach ($blessingTypes as $typeId => $type)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $blessing->blessingType->title }}</td>
-                                                        <td>{{ $blessing->answer }}</td>
-                                                        <td>{{ $userForm->surname }} {{ $userForm->givenName }}</td>
+                                                        <td>{{ $type->title }}</td>
+                                                        <td>{{ isset($answers[$typeId]) ? $answers[$typeId]->answer : '' }}</td>
+                                                        <td>{{ $userForm->surname ?? ''}} {{ $userForm->givenName ?? ''}}</td>
                                                     </tr>
                                                     @endforeach
                                                 </tbody>

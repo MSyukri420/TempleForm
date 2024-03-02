@@ -71,9 +71,20 @@ class DashboardController extends Controller
 
     public function showFullDetails($userFormId)
     {
-        $userForm = UserForm::with(['user', 'userFormBlessings.blessingType'])->findOrFail($userFormId);
+        $userForm = UserForm::find($userFormId);
+        $blessingTypes = BlessingType::all()->keyBy('id');
 
-        return view('details.full', compact('userForm'));
+        $userFormBlessings = UserFormBlessing::where('user_form_id', $userForm->id)->get();
+
+        $answers = $userFormBlessings->groupBy('blessing_type_id')->map(function ($item) {
+            return $item->first();
+        });
+
+        // display answers
+        Log::info($answers);
+
+
+        return view('details.full', compact('userForm', 'blessingTypes', 'answers'));
     }
 
 
